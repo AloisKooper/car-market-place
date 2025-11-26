@@ -10,8 +10,9 @@ import Footer from './components/Footer';
 import Dashboard from './components/Dashboard';
 import CompareBar from './components/CompareBar';
 import CompareModal from './components/CompareModal';
+import LoadingScreen from './components/LoadingScreen';
 import { PageView, Product } from './types';
-import { CATEGORIES, PERFORMANCE_HIGHLIGHTS, PRICE_RANGES, MAKES, LOGO_URL, BRAND_ICONS } from './constants';
+import { CATEGORIES, PERFORMANCE_HIGHLIGHTS, PRICE_RANGES, MAKES, LOGO_URL, BRAND_ICONS, MOCK_PRODUCTS } from './constants';
 import { ArrowRight, Star, ShieldCheck, Truck, Wrench, Quote, Filter, ChevronDown, Check, Globe as GlobeIcon, Search, Plus, Minus, Heart, Trash2, ArrowRightLeft, X, Info, Gauge, Activity, Radio, MapPin, Cpu, Ship, Settings, Zap, Anchor, Box, Brain, Terminal, Layers, Wind, CloudLightning, Fingerprint, Container, ShoppingBag, Smartphone, Home, ChevronRight, Share2, Printer, Timer, Calendar, Fuel, Scale, Clock, Database, Network, Binary, BarChart3, ScanLine, ListFilter, AlertCircle, ShoppingCart, User, Package, CreditCard, Bell, Car, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Routes, Route, useNavigate, useLocation, Navigate, useParams } from 'react-router-dom';
@@ -132,155 +133,163 @@ const Breadcrumbs = ({ items, onNavigate }: { items: { label: string; view?: Pag
    );
 };
 
-// --- Innovation Page Component (Redesigned) ---
-// --- Innovation Page Component (Redesigned - Bento Grid) ---
+// --- Innovation Page Component (Redesigned - Premium Tech) ---
 const InnovationPage: React.FC<{ onOpenChat: () => void, isDarkMode: boolean }> = ({ onOpenChat, isDarkMode }) => {
    return (
       <motion.div
          initial={{ opacity: 0 }}
          animate={{ opacity: 1 }}
          exit={{ opacity: 0 }}
-         className="min-h-screen bg-background text-primary pt-20 overflow-x-hidden"
+         className="min-h-screen bg-[#050505] text-white pt-20 overflow-x-hidden font-sans"
       >
-         {/* 1. Hero: Glitch / Reveal */}
-         <section className="py-24 md:py-32 border-b border-border relative overflow-hidden">
-            <div className="absolute inset-0 bg-[url('/S3_Hero_Section_GAN.jpg')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
+         {/* 1. Hero: Immersive & Cinematic */}
+         <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
+            <div className="absolute inset-0 bg-[url('/S3_Hero_Section_GAN.jpg')] bg-cover bg-center opacity-40 scale-105 animate-pulse-slow"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/10 via-transparent to-transparent"></div>
+
             <div className="max-w-[1440px] mx-auto px-6 lg:px-12 relative z-10 text-center">
                <motion.div
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.8, ease: "circOut" }}
+                  initial={{ y: 50, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                >
-                  <div className="inline-flex items-center gap-2 mb-6 border border-accent/50 bg-accent/10 px-4 py-1 rounded-full backdrop-blur-sm">
-                     <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
-                     <span className="text-[10px] font-bold uppercase tracking-widest text-accent">System Online • V3.0</span>
+                  <div className="inline-flex items-center gap-3 mb-8 border border-white/10 bg-white/5 px-6 py-2 rounded-full backdrop-blur-md hover:bg-white/10 transition-colors cursor-default">
+                     <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+                     </span>
+                     <span className="text-xs font-bold uppercase tracking-[0.2em] text-white/80">Auto Nations Protocol V3.0</span>
                   </div>
-                  <h1 className="text-6xl md:text-9xl font-black tracking-tighter text-primary mb-6 leading-none">
-                     FUTURE.<br />
-                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-gray-500 to-transparent animate-gradient-x">IMPORTED.</span>
+
+                  <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter text-white mb-8 leading-[0.9]">
+                     BEYOND <br />
+                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-400 to-gray-600">LOGISTICS.</span>
                   </h1>
-                  <p className="text-lg md:text-xl text-secondary max-w-2xl mx-auto font-light tracking-wide mb-10">
-                     We don't just ship cars. We engineer the entire supply chain.
-                     <br className="hidden md:block" />
-                     From algorithmic sourcing in Guangzhou to doorstep delivery in Windhoek.
+
+                  <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed mb-12">
+                     We've re-engineered the global supply chain. Algorithmic sourcing, real-time tracking, and direct factory access.
                   </p>
+
+                  <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
+                     <button
+                        onClick={onOpenChat}
+                        className="group relative px-8 py-4 bg-white text-black font-bold uppercase tracking-widest overflow-hidden hover:bg-gray-200 transition-all duration-300 rounded-sm"
+                     >
+                        <span className="relative z-10 flex items-center gap-3">
+                           Initialize Sourcing <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                     </button>
+                     <button className="px-8 py-4 border border-white/20 text-white font-bold uppercase tracking-widest hover:bg-white/5 transition-all duration-300 rounded-sm flex items-center gap-3">
+                        <span className="w-2 h-2 bg-accent rounded-full"></span> Live Network Status
+                     </button>
+                  </div>
                </motion.div>
             </div>
          </section>
 
-         {/* 2. The Digital Garage (Bento Grid) */}
-         <section className="py-24 bg-surface/30">
+         {/* 2. The Core Systems (Grid) */}
+         <section className="py-32 relative">
             <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
-               <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[300px]">
+               <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                  <div>
+                     <h2 className="text-4xl md:text-5xl font-light mb-4">Core <span className="font-bold text-white">Systems</span></h2>
+                     <div className="w-20 h-1 bg-accent"></div>
+                  </div>
+                  <p className="text-gray-400 max-w-md text-sm leading-relaxed text-right md:text-left">
+                     Our infrastructure is built on three pillars: Artificial Intelligence, Global Logistics, and Quality Assurance.
+                  </p>
+               </div>
 
-                  {/* Card 1: AI Sourcing (Large) */}
-                  <motion.div
-                     whileHover={{ scale: 1.02 }}
-                     className="md:col-span-2 lg:col-span-2 row-span-2 bg-background border border-border p-8 relative overflow-hidden group"
-                  >
-                     <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                     <div className="relative z-10 h-full flex flex-col justify-between">
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {/* System 1 */}
+                  <div className="group relative bg-[#0A0A0A] border border-white/5 p-8 hover:border-accent/50 transition-colors duration-500 overflow-hidden">
+                     <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition-opacity">
+                        <Binary className="w-16 h-16 text-white" strokeWidth={0.5} />
+                     </div>
+                     <div className="relative z-10 h-full flex flex-col justify-between min-h-[300px]">
                         <div>
-                           <Binary className="w-12 h-12 text-accent mb-6" strokeWidth={1} />
-                           <h3 className="text-3xl font-bold text-primary mb-2">AI Sourcing Engine</h3>
-                           <p className="text-secondary max-w-sm">
-                              Our proprietary bot scans 50+ supplier databases in real-time. It cross-references VINs, checks stock levels, and negotiates prices in milliseconds.
+                           <div className="text-accent font-mono text-xs mb-4">/// SYSTEM_01</div>
+                           <h3 className="text-2xl font-bold mb-4 group-hover:text-accent transition-colors">AI Sourcing</h3>
+                           <p className="text-gray-400 text-sm leading-relaxed">
+                              Proprietary algorithms scan global databases to find the exact spec you need at the best market price.
                            </p>
                         </div>
-                        <div className="font-mono text-xs text-accent/70">
-                           &gt; QUERY_LATENCY: 0.02ms<br />
-                           &gt; SOURCES: 54<br />
-                           &gt; STATUS: ACTIVE
+                        <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-center">
+                           <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Latency: 12ms</span>
+                           <ArrowRight className="w-4 h-4 text-accent -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all" />
                         </div>
                      </div>
-                     {/* Decorative Code Background */}
-                     <div className="absolute right-0 top-0 bottom-0 w-1/2 opacity-5 font-mono text-[10px] p-4 overflow-hidden pointer-events-none">
-                        {Array(20).fill(0).map((_, i) => (
-                           <div key={i}>{`const source_${i} = await fetch(API_Endpoint_${i});`}</div>
-                        ))}
-                     </div>
-                  </motion.div>
+                  </div>
 
-                  {/* Card 2: Live Tracking */}
-                  <motion.div
-                     whileHover={{ y: -5 }}
-                     className="bg-[#09090b] border border-border p-6 flex flex-col justify-between relative overflow-hidden group"
-                  >
-                     <div className="absolute inset-0 bg-[url('/S3_Hero_Section_GAN.jpg')] bg-cover bg-center opacity-20 group-hover:opacity-40 transition-opacity duration-500 mix-blend-luminosity"></div>
-                     <div className="relative z-10">
-                        <GlobeIcon className="w-8 h-8 text-white mb-4" />
-                        <h3 className="text-xl font-bold text-white mb-1">Global Track</h3>
-                        <p className="text-gray-400 text-xs">Real-time vessel tracking from CN to NA.</p>
+                  {/* System 2 */}
+                  <div className="group relative bg-[#0A0A0A] border border-white/5 p-8 hover:border-accent/50 transition-colors duration-500 overflow-hidden">
+                     <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition-opacity">
+                        <GlobeIcon className="w-16 h-16 text-white" strokeWidth={0.5} />
                      </div>
-                     <div className="relative z-10 flex items-center gap-2 mt-4">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">Live</span>
+                     <div className="relative z-10 h-full flex flex-col justify-between min-h-[300px]">
+                        <div>
+                           <div className="text-accent font-mono text-xs mb-4">/// SYSTEM_02</div>
+                           <h3 className="text-2xl font-bold mb-4 group-hover:text-accent transition-colors">Global Logistics</h3>
+                           <p className="text-gray-400 text-sm leading-relaxed">
+                              End-to-end tracking from factory floor to your driveway. Customs, freight, and insurance handled automatically.
+                           </p>
+                        </div>
+                        <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-center">
+                           <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Coverage: 100%</span>
+                           <ArrowRight className="w-4 h-4 text-accent -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all" />
+                        </div>
                      </div>
-                  </motion.div>
+                  </div>
 
-                  {/* Card 3: Quality Control */}
-                  <motion.div
-                     whileHover={{ y: -5 }}
-                     className="bg-background border border-border p-6 flex flex-col justify-between group"
-                  >
-                     <ShieldCheck className="w-8 h-8 text-primary mb-4 group-hover:text-accent transition-colors" strokeWidth={1} />
-                     <div>
-                        <h3 className="text-xl font-bold text-primary mb-1">Zero Defects</h3>
-                        <p className="text-secondary text-xs">Every part is scanned and verified before shipping.</p>
+                  {/* System 3 */}
+                  <div className="group relative bg-[#0A0A0A] border border-white/5 p-8 hover:border-accent/50 transition-colors duration-500 overflow-hidden">
+                     <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition-opacity">
+                        <ShieldCheck className="w-16 h-16 text-white" strokeWidth={0.5} />
                      </div>
-                  </motion.div>
-
-                  {/* Card 4: The Network (Tall) */}
-                  <motion.div
-                     whileHover={{ scale: 1.02 }}
-                     className="md:col-span-1 row-span-2 bg-accent text-white p-8 flex flex-col justify-between relative overflow-hidden"
-                  >
-                     <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
-                     <div className="relative z-10">
-                        <Network className="w-12 h-12 text-white mb-6" />
-                        <h3 className="text-3xl font-bold mb-4">The Network</h3>
-                        <p className="text-white/80 text-sm leading-relaxed">
-                           Access a closed network of verified manufacturers. No middlemen. No markups. Just direct access to the factory floor.
-                        </p>
+                     <div className="relative z-10 h-full flex flex-col justify-between min-h-[300px]">
+                        <div>
+                           <div className="text-accent font-mono text-xs mb-4">/// SYSTEM_03</div>
+                           <h3 className="text-2xl font-bold mb-4 group-hover:text-accent transition-colors">Zero Defects</h3>
+                           <p className="text-gray-400 text-sm leading-relaxed">
+                              Every vehicle and part undergoes a rigorous 150-point inspection. We guarantee authenticity and condition.
+                           </p>
+                        </div>
+                        <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-center">
+                           <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Verified</span>
+                           <ArrowRight className="w-4 h-4 text-accent -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all" />
+                        </div>
                      </div>
-                     <button onClick={onOpenChat} className="mt-8 bg-white text-accent px-6 py-3 text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">
-                        Join Network
-                     </button>
-                  </motion.div>
-
-                  {/* Card 5: Speed */}
-                  <motion.div
-                     whileHover={{ y: -5 }}
-                     className="md:col-span-2 bg-surface border border-border p-8 flex items-center justify-between group"
-                  >
-                     <div>
-                        <h3 className="text-2xl font-bold text-primary mb-2">Rapid Logistics</h3>
-                        <p className="text-secondary text-sm max-w-xs">Air freight options for urgent parts. 5-7 days delivery.</p>
-                     </div>
-                     <div className="w-24 h-24 bg-background rounded-full flex items-center justify-center border border-border group-hover:border-accent transition-colors">
-                        <Zap className="w-10 h-10 text-primary group-hover:text-accent transition-colors" />
-                     </div>
-                  </motion.div>
-
+                  </div>
                </div>
             </div>
          </section>
 
-         {/* 3. CTA */}
-         <section className="py-24 bg-background border-t border-border text-center">
-            <div className="max-w-2xl mx-auto px-6">
-               <h2 className="text-3xl font-light text-primary mb-6">Ready to <span className="font-bold">Upgrade?</span></h2>
-               <p className="text-secondary mb-8">Initialize the sourcing protocol today.</p>
-               <button
-                  onClick={onOpenChat}
-                  className="bg-primary text-background px-12 py-4 text-sm font-bold uppercase tracking-widest hover:bg-accent hover:text-white transition-all duration-300"
-               >
-                  Start Sourcing
-               </button>
+         {/* 3. Data Visualization / Stats */}
+         <section className="py-24 bg-[#0A0A0A] border-y border-white/5">
+            <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
+               <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+                  <div>
+                     <div className="text-4xl md:text-5xl font-black text-white mb-2">50+</div>
+                     <div className="text-xs font-bold uppercase tracking-widest text-gray-500">Global Suppliers</div>
+                  </div>
+                  <div>
+                     <div className="text-4xl md:text-5xl font-black text-white mb-2">12ms</div>
+                     <div className="text-xs font-bold uppercase tracking-widest text-gray-500">Query Speed</div>
+                  </div>
+                  <div>
+                     <div className="text-4xl md:text-5xl font-black text-white mb-2">100%</div>
+                     <div className="text-xs font-bold uppercase tracking-widest text-gray-500">Insured</div>
+                  </div>
+                  <div>
+                     <div className="text-4xl md:text-5xl font-black text-white mb-2">24/7</div>
+                     <div className="text-xs font-bold uppercase tracking-widest text-gray-500">Support</div>
+                  </div>
+               </div>
             </div>
          </section>
 
-         <Footer isDarkMode={isDarkMode} />
+         <Footer isDarkMode={true} />
       </motion.div>
    );
 };
@@ -293,11 +302,11 @@ const ServicesPage: React.FC<{ isDarkMode: boolean; onEnquire: (product: any) =>
       {
          id: '01',
          title: 'Vehicle Import',
-         icon: Container,
-         shortDesc: 'Sourcing specific models.',
-         description: 'Looking for a specific spec? We facilitate the import of vehicles directly from China and major global markets. Whether it\'s the latest Golf 8R or a high-spec Chinese SUV, we handle the entire procurement process.',
-         features: ['Spec Sourcing', 'Price Negotiation', 'Import Duties'],
-         image: '/vehicles_GMN.jpg'
+         icon: Car,
+         shortDesc: 'Sourced from global hubs.',
+         description: 'We specialize in sourcing high-performance and luxury vehicles from Japan, UK, and Singapore. Every vehicle undergoes a 150-point inspection before shipment.',
+         features: ['Auction Access', 'Pre-Purchase Inspection', 'Secure Shipping'],
+         image: '/Auto Nations/2015 Golf 7 R.jpg'
       },
       {
          id: '02',
@@ -306,7 +315,7 @@ const ServicesPage: React.FC<{ isDarkMode: boolean; onEnquire: (product: any) =>
          shortDesc: 'Access to global catalogs.',
          description: 'We connect you to the factories. From body kits and wheels to lighting and interior upgrades. If it exists in the Asian aftermarket, we can get it to Windhoek for you.',
          features: ['Body Kits', 'Lighting Systems', 'Alloy Wheels'],
-         image: '/Performance.jpg'
+         image: '/Auto Nations/Exterio Styling.jpg'
       },
       {
          id: '03',
@@ -315,7 +324,7 @@ const ServicesPage: React.FC<{ isDarkMode: boolean; onEnquire: (product: any) =>
          shortDesc: 'China to Windhoek.',
          description: 'We take the headache out of importing. Our team handles all freight forwarding, customs clearing, and tax documentation. You pay one price, and we deliver the goods.',
          features: ['Freight Forwarding', 'Clearing Agents', 'Insurance'],
-         image: '/Quality_Assurance_GMN.jpg'
+         image: '/Auto Nations/Quality Assurance.jpg'
       },
       {
          id: '04',
@@ -324,7 +333,7 @@ const ServicesPage: React.FC<{ isDarkMode: boolean; onEnquire: (product: any) =>
          shortDesc: 'For garages & shops.',
          description: 'Running a workshop? We offer wholesale pricing for bulk orders. Get consistent supply of consumables, performance parts, and accessories for your business.',
          features: ['Wholesale Rates', 'Scheduled Delivery', 'Business Accounts'],
-         image: '/Wheels.jpg'
+         image: '/Auto Nations/Wheels & Tyres.jpg'
       }
    ];
 
@@ -335,9 +344,11 @@ const ServicesPage: React.FC<{ isDarkMode: boolean; onEnquire: (product: any) =>
          exit={{ opacity: 0 }}
          className="min-h-screen bg-background text-primary transition-colors duration-500 pt-20"
       >
+
+
          {/* 1. Hero Section */}
          <section className="relative h-[60vh] flex flex-col justify-center items-center overflow-hidden border-b border-border">
-            <div className="absolute inset-0 bg-[url('/Exterior_Styling.jpg')] bg-cover bg-center opacity-20 grayscale"></div>
+            <div className="absolute inset-0 bg-[url('/Auto Nations/Exterio Styling.jpg')] bg-cover bg-center opacity-20 grayscale"></div>
             <div className="z-10 text-center px-6">
                <motion.div
                   initial={{ y: 30, opacity: 0 }}
@@ -509,7 +520,7 @@ export default function App() {
       }
    };
 
-   const [products, setProducts] = useState<Product[]>([]); // State for products
+   const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS); // State for products
 
    // Persistent State Initialization
    const [cart, setCart] = useState<Product[]>(() => {
@@ -550,6 +561,7 @@ export default function App() {
 
    // Inventory Mobile State
    const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
    // Loading States
    const [isProductsLoading, setIsProductsLoading] = useState(false);
@@ -566,6 +578,15 @@ export default function App() {
    const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
    const [activePerformanceIndex, setActivePerformanceIndex] = useState(0);
    const [hoveredSpecIndex, setHoveredSpecIndex] = useState<number | null>(null);
+   const [isLoading, setIsLoading] = useState(true);
+
+   useEffect(() => {
+      // Simulate loading time
+      const timer = setTimeout(() => {
+         setIsLoading(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+   }, []);
 
    useEffect(() => {
       const root = window.document.documentElement;
@@ -577,6 +598,8 @@ export default function App() {
    }, [isDarkMode]);
 
    // Fetch Products from Supabase
+   // Fetch Products from Supabase - DISABLED FOR TEMPLATE UPDATE TO USE LOCAL MOCK DATA
+   /*
    useEffect(() => {
       const fetchProducts = async () => {
          setIsProductsLoading(true);
@@ -614,6 +637,7 @@ export default function App() {
 
       fetchProducts();
    }, []);
+   */
 
    // Persistence Effects
    useEffect(() => {
@@ -1144,7 +1168,7 @@ export default function App() {
                         onHoverEnd={() => setHoveredCategory(null)}
                         onClick={() => {
                            setCurrentPage(PageView.PRODUCTS);
-                           if (cat.id === 'vehicles') setSelectedCategories(['vehicles']);
+                           setSelectedCategories([cat.id]);
                         }}
                         className="relative flex-1 border-r border-b md:border-b-0 border-border bg-surface overflow-hidden cursor-pointer group min-h-[100px] md:min-h-0"
                         animate={{
@@ -1236,7 +1260,7 @@ export default function App() {
                /// ENGINEERED_FOR_PERFORMANCE
                   </div>
                </div>
-               <div className="flex flex-col lg:flex-row gap-0 border border-border bg-background shadow-2xl">
+               <div className="flex flex-col lg:flex-row gap-0 border border-border bg-background shadow-2xl w-full max-w-full overflow-hidden">
                   <div className="lg:w-[60%] relative aspect-video lg:aspect-auto min-h-[400px] overflow-hidden group">
                      <AnimatePresence mode="wait">
                         <motion.div
@@ -1255,11 +1279,11 @@ export default function App() {
                            <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
                         </motion.div>
                      </AnimatePresence>
-                     <div className="absolute bottom-8 left-8">
+                     <div className="absolute bottom-8 left-8 right-8">
                         <span className="bg-accent text-white text-[10px] font-bold px-2 py-1 uppercase tracking-widest mb-2 inline-block">
                            Spec Sheet
                         </span>
-                        <h3 className="text-white text-3xl font-bold">{PERFORMANCE_HIGHLIGHTS[activePerformanceIndex].name}</h3>
+                        <h3 className="text-white text-3xl font-bold break-words">{PERFORMANCE_HIGHLIGHTS[activePerformanceIndex].name}</h3>
                      </div>
                   </div>
                   <div className="lg:w-[40%] flex flex-col">
@@ -1357,7 +1381,7 @@ export default function App() {
 
                <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-border">
                   <motion.div whileHover="hover" className="relative h-[600px] group overflow-hidden cursor-default">
-                     <img src="/Quality_Assurance_GMN.jpg" className="absolute inset-0 w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0 opacity-60 group-hover:opacity-100" />
+                     <img src="/Auto Nations/Global Logistics.jpg" className="absolute inset-0 w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0 opacity-60 group-hover:opacity-100" />
                      <div className="absolute inset-0 bg-background/40 group-hover:bg-transparent transition-colors duration-500"></div>
 
                      <div className="absolute inset-0 p-8 flex flex-col justify-between">
@@ -1373,7 +1397,7 @@ export default function App() {
                   </motion.div>
 
                   <motion.div whileHover="hover" className="relative h-[600px] group overflow-hidden cursor-default">
-                     <img src="/vehicles_GMN.jpg" className="absolute inset-0 w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0 opacity-60 group-hover:opacity-100" />
+                     <img src="/Auto Nations/Quality Assurance.jpg" className="absolute inset-0 w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0 opacity-60 group-hover:opacity-100" />
                      <div className="absolute inset-0 bg-background/40 group-hover:bg-transparent transition-colors duration-500"></div>
 
                      <div className="absolute inset-0 p-8 flex flex-col justify-between">
@@ -1542,12 +1566,21 @@ export default function App() {
          <div className="max-w-[1440px] mx-auto px-6 lg:px-12 pb-24">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-12 gap-6 border-b border-border pb-8">
-               <div>
-                  <h1 className="text-4xl md:text-5xl font-light text-primary mb-4">Inventory <span className="font-bold">Database</span></h1>
-                  <p className="text-secondary text-sm max-w-xl leading-relaxed">
-                     Access real-time stock levels. Filter by technical specification, manufacturer, or component category.
-                  </p>
-               </div>
+               {selectedCategories.length === 1 && CATEGORIES.find(c => c.id === selectedCategories[0]) ? (
+                  <div>
+                     <h1 className="text-4xl md:text-5xl font-light text-primary mb-4">{CATEGORIES.find(c => c.id === selectedCategories[0])?.name} <span className="font-bold">Collection</span></h1>
+                     <p className="text-secondary text-sm max-w-xl leading-relaxed">
+                        {CATEGORIES.find(c => c.id === selectedCategories[0])?.description}
+                     </p>
+                  </div>
+               ) : (
+                  <div>
+                     <h1 className="text-4xl md:text-5xl font-light text-primary mb-4">Inventory <span className="font-bold">Database</span></h1>
+                     <p className="text-secondary text-sm max-w-xl leading-relaxed">
+                        Access real-time stock levels. Filter by technical specification, manufacturer, or component category.
+                     </p>
+                  </div>
+               )}
 
                {/* Desktop Sort */}
                <div className="hidden lg:flex items-center gap-4">
@@ -1722,6 +1755,9 @@ export default function App() {
 
    return (
       <div className={`min-h-screen transition-colors duration-500 ${isDarkMode ? 'dark bg-black' : 'bg-white'}`}>
+         <AnimatePresence>
+            {isLoading && <LoadingScreen key="loading-screen" />}
+         </AnimatePresence>
          <Navbar
             onNavigate={setCurrentPage}
             cartCount={cart.length}
@@ -1730,6 +1766,7 @@ export default function App() {
             isDarkMode={isDarkMode}
             user={user}
             currentPage={getPageView(location.pathname)}
+            onMobileMenuToggle={(open) => setIsMobileMenuOpen(open)}
          />
          <AnimatePresence mode="wait">
             <div key={location.pathname} className="h-full">
@@ -1748,7 +1785,9 @@ export default function App() {
          </AnimatePresence>
 
          {/* Global Components */}
-         <AIChatBot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} initialMessage={chatInitialMessage} />
+         {!isMobileMenuOpen && (
+            <AIChatBot isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} initialMessage={chatInitialMessage} />
+         )}
          <CompareBar
             products={compareList}
             onRemove={(id) => setCompareList(prev => prev.filter(p => p.id !== id))}

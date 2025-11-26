@@ -34,40 +34,40 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ isOpen, onClose, onOpen, external
   // Handle External Message Trigger
   useEffect(() => {
     if (externalMessage && isOpen) {
-        handleExternalSend(externalMessage);
+      handleExternalSend(externalMessage);
     }
   }, [externalMessage, isOpen]);
 
   const handleExternalSend = async (text: string) => {
-      // Avoid duplicate triggers if last message is same
-      if (messages[messages.length - 1].text === text && messages[messages.length - 1].role === 'user') return;
+    // Avoid duplicate triggers if last message is same
+    if (messages[messages.length - 1].text === text && messages[messages.length - 1].role === 'user') return;
 
-      const userMsg: ChatMessage = {
-        id: Date.now().toString(),
-        role: 'user',
-        text: text,
+    const userMsg: ChatMessage = {
+      id: Date.now().toString(),
+      role: 'user',
+      text: text,
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMsg]);
+    setIsLoading(true);
+
+    try {
+      const history = messages.slice(-5).map(m => `${m.role}: ${m.text}`);
+      const responseText = await generateCarAdvice(userMsg.text, history);
+
+      const botMsg: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        role: 'model',
+        text: responseText,
         timestamp: new Date()
       };
-      
-      setMessages(prev => [...prev, userMsg]);
-      setIsLoading(true);
-
-      try {
-        const history = messages.slice(-5).map(m => `${m.role}: ${m.text}`);
-        const responseText = await generateCarAdvice(userMsg.text, history);
-        
-        const botMsg: ChatMessage = {
-          id: (Date.now() + 1).toString(),
-          role: 'model',
-          text: responseText,
-          timestamp: new Date()
-        };
-        setMessages(prev => [...prev, botMsg]);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
+      setMessages(prev => [...prev, botMsg]);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSend = async () => {
@@ -87,7 +87,7 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ isOpen, onClose, onOpen, external
     try {
       const history = messages.slice(-5).map(m => `${m.role}: ${m.text}`);
       const responseText = await generateCarAdvice(userMsg.text, history);
-      
+
       const botMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
         role: 'model',
@@ -111,16 +111,15 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ isOpen, onClose, onOpen, external
       {/* Minimal Toggle Button */}
       <button
         onClick={onOpen}
-        className={`fixed bottom-8 right-8 z-40 bg-white text-black p-4 shadow-2xl transition-all duration-500 hover:scale-105 ${isOpen ? 'translate-y-20 opacity-0' : 'translate-y-0 opacity-100'}`}
+        className={`fixed bottom-8 right-8 z-40 bg-white text-black w-14 h-14 rounded-full shadow-2xl transition-all duration-500 hover:scale-105 flex items-center justify-center ${isOpen ? 'translate-y-20 opacity-0' : 'translate-y-0 opacity-100'}`}
       >
         <Sparkles className="w-6 h-6" strokeWidth={1.5} />
       </button>
 
       {/* Glass Panel Chat Window */}
-      <div 
-        className={`fixed bottom-8 right-8 z-50 w-[90vw] md:w-[450px] bg-black/80 backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] origin-bottom-right ${
-          isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-8 pointer-events-none'
-        }`}
+      <div
+        className={`fixed bottom-8 right-8 z-50 w-[90vw] md:w-[450px] bg-black/80 backdrop-blur-xl border border-white/10 shadow-2xl flex flex-col transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] origin-bottom-right ${isOpen ? 'scale-100 opacity-100 translate-y-0' : 'scale-95 opacity-0 translate-y-8 pointer-events-none'
+          }`}
         style={{ height: '600px', maxHeight: '80vh' }}
       >
         {/* Header */}
@@ -131,7 +130,7 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ isOpen, onClose, onOpen, external
               <h3 className="font-bold text-sm tracking-widest uppercase text-white">Concierge AI</h3>
             </div>
           </div>
-          <button 
+          <button
             onClick={onClose}
             className="text-gray-400 hover:text-white transition-colors"
           >
@@ -147,11 +146,10 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ isOpen, onClose, onOpen, external
               className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
             >
               <div
-                className={`max-w-[85%] text-sm leading-relaxed ${
-                  msg.role === 'user'
+                className={`max-w-[85%] text-sm leading-relaxed ${msg.role === 'user'
                     ? 'text-right text-white'
                     : 'text-left text-gray-300'
-                }`}
+                  }`}
               >
                 {msg.text}
               </div>
@@ -162,7 +160,7 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ isOpen, onClose, onOpen, external
           ))}
           {isLoading && (
             <div className="flex justify-start">
-               <span className="text-xs text-gray-500 animate-pulse">Processing request...</span>
+              <span className="text-xs text-gray-500 animate-pulse">Processing request...</span>
             </div>
           )}
           <div ref={messagesEndRef} />

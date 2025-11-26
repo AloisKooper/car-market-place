@@ -31,6 +31,7 @@ export interface Category {
   name: string;
   icon: string;
   image?: string;
+  description?: string;
 }
 
 export interface ChatMessage {

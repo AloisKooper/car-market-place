@@ -15,9 +15,10 @@ interface NavbarProps {
   isDarkMode: boolean;
   user: any; // Supabase user object
   currentPage: PageView;
+  onMobileMenuToggle?: (open: boolean) => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, toggleTheme, isDarkMode, user, currentPage }) => {
+const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, toggleTheme, isDarkMode, user, currentPage, onMobileMenuToggle }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -42,6 +43,13 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, t
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleMobileMenuOpenChange = (open: boolean) => {
+    setIsMobileMenuOpen(open);
+    if (onMobileMenuToggle) {
+      onMobileMenuToggle(open);
+    }
+  };
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -88,16 +96,16 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, t
               className="flex items-center cursor-pointer group relative z-50"
               onClick={() => {
                 onNavigate(PageView.HOME);
-                setIsMobileMenuOpen(false);
+                handleMobileMenuOpenChange(false);
               }}
             >
               <img
-                src={(isTransparentWhiteState || isDarkMode) ? '/Grand Motors white logo.png' : '/Grand Motors black logo.png'}
-                alt="Grand Motors NA Logo"
+                src="/Auto Nations/Auto nations logo new.png"
+                alt="Auto Nations Logo"
                 className="h-10 md:h-12 w-auto mr-3 object-contain drop-shadow-md"
               />
               <div className="flex flex-col">
-                <span className={`text-lg font-bold tracking-[0.2em] leading-none transition-colors duration-300 ${textColorClass}`}>GRAND MOTORS NA</span>
+                <span className={`text-lg font-bold tracking-[0.2em] leading-none transition-colors duration-300 ${textColorClass}`}>AUTO NATIONS</span>
               </div>
             </div>
 
@@ -254,7 +262,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, t
               </button>
 
               <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                onClick={() => handleMobileMenuOpenChange(!isMobileMenuOpen)}
                 className={`p-2 rounded-full transition-colors ${isMobileMenuOpen ? 'bg-white/10 text-white' : textColorClass}`}
               >
                 <AnimatePresence mode="wait">
@@ -283,8 +291,8 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, t
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+              onClick={() => handleMobileMenuOpenChange(false)}
+              className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm md:hidden"
             />
 
             {/* Drawer */}
@@ -293,38 +301,55 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, t
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed inset-y-0 right-0 z-40 w-[85%] max-w-sm bg-background/95 backdrop-blur-xl border-l border-border shadow-2xl flex flex-col md:hidden"
+              className="fixed inset-y-0 right-0 z-[70] w-[85%] max-w-sm bg-background/95 backdrop-blur-xl border-l border-border shadow-2xl flex flex-col md:hidden"
             >
-              <div className="pt-28 px-8 pb-8 flex flex-col h-full overflow-y-auto">
+              <div className="pt-24 px-8 pb-8 flex flex-col h-full overflow-y-auto">
+
+                <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src="/Auto Nations/Auto nations logo new.png"
+                      alt="Auto Nations Logo"
+                      className="h-8 w-auto object-contain drop-shadow-md"
+                    />
+                    <span className="text-sm font-bold tracking-[0.2em] text-white">AUTO NATIONS</span>
+                  </div>
+                  <button
+                    onClick={() => handleMobileMenuOpenChange(false)}
+                    className="p-2 rounded-full bg-white/10 text-white"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
 
                 {/* User Status Top */}
                 <div className="mb-8 pb-8 border-b border-border">
                   {user ? (
-                    <div className="flex items-center gap-4" onClick={() => { onNavigate(PageView.PROFILE); setIsMobileMenuOpen(false); }}>
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-red-900 text-white flex items-center justify-center text-lg font-bold shadow-lg">
+                    <div className="flex items-center gap-4" onClick={() => { onNavigate(PageView.PROFILE); handleMobileMenuOpenChange(false); }}>
+                      <div className={`w-12 h-12 rounded-full bg-gradient-to-br from-accent to-red-900 flex items-center justify-center text-lg font-bold shadow-lg ${!isDarkMode ? 'text-white' : 'text-white'}`}>
                         {getInitials(user.email)}
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-secondary">Currently Active</p>
-                        <p className="text-sm font-bold text-primary truncate max-w-[180px]">{user.email}</p>
+                        <p className={`text-[10px] font-bold uppercase tracking-widest ${!isDarkMode ? 'text-white' : 'text-secondary'}`}>Currently Active</p>
+                        <p className={`text-sm font-bold truncate max-w-[180px] ${!isDarkMode ? 'text-white' : 'text-primary'}`}>{user.email}</p>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-secondary ml-auto" />
+                      <ChevronRight className={`w-5 h-5 ml-auto ${!isDarkMode ? 'text-white' : 'text-secondary'}`} />
                     </div>
                   ) : (
                     <button
-                      onClick={() => { setIsAuthModalOpen(true); setIsMobileMenuOpen(false); }}
+                      onClick={() => { setIsAuthModalOpen(true); handleMobileMenuOpenChange(false); }}
                       className="w-full flex items-center justify-between group"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-surface border border-border flex items-center justify-center text-secondary group-hover:bg-accent group-hover:text-white transition-colors">
-                          <User className="w-6 h-6" />
+                        <div className="w-12 h-12 rounded-full bg-surface border border-border flex items-center justify-center group-hover:bg-accent group-hover:text-white transition-colors">
+                          <User className={`w-6 h-6 ${!isDarkMode ? 'text-white' : 'text-secondary'}`} />
                         </div>
                         <div className="text-left">
-                          <p className="text-[10px] font-bold uppercase tracking-widest text-secondary">Guest Access</p>
-                          <p className="text-lg font-bold text-primary">Sign In / Join</p>
+                          <p className={`text-[10px] font-bold uppercase tracking-widest ${!isDarkMode ? 'text-white' : 'text-secondary'}`}>Guest Access</p>
+                          <p className={`text-lg font-bold ${!isDarkMode ? 'text-white' : 'text-primary'}`}>Sign In / Join</p>
                         </div>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-secondary group-hover:text-accent" />
+                      <ChevronRight className={`w-5 h-5 group-hover:text-accent ${!isDarkMode ? 'text-white' : 'text-secondary'}`} />
                     </button>
                   )}
                 </div>
@@ -343,11 +368,11 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, t
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: idx * 0.05 }}
-                      onClick={() => { onNavigate(item.view); setIsMobileMenuOpen(false); }}
+                      onClick={() => { onNavigate(item.view); handleMobileMenuOpenChange(false); }}
                       className="w-full flex items-center gap-4 group"
                     >
-                      <item.icon className="w-5 h-5 text-secondary group-hover:text-accent transition-colors" />
-                      <span className="text-xl font-light text-primary group-hover:pl-2 transition-all">{item.label}</span>
+                      <item.icon className={`w-5 h-5 group-hover:text-accent transition-colors ${!isDarkMode ? 'text-white' : 'text-secondary'}`} />
+                      <span className={`text-xl font-light group-hover:pl-2 transition-all ${!isDarkMode ? 'text-white' : 'text-primary'}`}>{item.label}</span>
                       {item.count !== undefined && item.count > 0 && (
                         <span className="ml-auto bg-accent text-white text-xs font-bold px-2 py-1 rounded-full">{item.count}</span>
                       )}
@@ -358,7 +383,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, t
                 {/* Bottom Actions */}
                 <div className="pt-8 border-t border-border mt-auto">
                   <div className="flex justify-between items-center mb-6">
-                    <span className="text-sm font-medium text-secondary">Theme Preference</span>
+                    <span className={`text-sm font-medium ${!isDarkMode ? 'text-white' : 'text-secondary'}`}>Theme Preference</span>
                     <div className="flex bg-surface rounded-full p-1 border border-border">
                       <button
                         onClick={() => !isDarkMode && toggleTheme()}
