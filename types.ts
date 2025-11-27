@@ -5,10 +5,12 @@ export interface Product {
   category: string;
   price: number;
   image: string;
+  images?: string[];
   rating: number;
   reviews: number;
   featured?: boolean;
   shippingInfo?: string; // e.g., "In Stock - Windhoek" or "Import Order (CN)"
+  description?: string;
   specs?: {
     hpGain?: string;
     weight?: string;
@@ -18,6 +20,7 @@ export interface Product {
   // Vehicle Specifics
   make?: string;
   model?: string;
+  vehicleType?: string;
   year?: number;
   mileage?: string;
   transmission?: 'Automatic' | 'Manual' | 'DSG' | 'PDK';
@@ -50,5 +53,6 @@ export enum PageView {
   COMPARE = 'COMPARE',
   SERVICES = 'SERVICES',
   INNOVATION = 'INNOVATION',
-  PROFILE = 'PROFILE'
+  PROFILE = 'PROFILE',
+  ADMIN = 'ADMIN'
 }

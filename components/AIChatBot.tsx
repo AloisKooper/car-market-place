@@ -17,7 +17,7 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ isOpen, onClose, onOpen, external
     {
       id: 'welcome',
       role: 'model',
-      text: "Welcome to Auto Nations Concierge. How may I assist with your vehicle configuration today?",
+      text: "Welcome to O.K.S Auto Concierge. How may I assist with your vehicle configuration today?",
       timestamp: new Date()
     }
   ]);
@@ -147,8 +147,8 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ isOpen, onClose, onOpen, external
             >
               <div
                 className={`max-w-[85%] text-sm leading-relaxed ${msg.role === 'user'
-                    ? 'text-right text-white'
-                    : 'text-left text-gray-300'
+                  ? 'text-right text-white'
+                  : 'text-left text-gray-300'
                   }`}
               >
                 {msg.text}

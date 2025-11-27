@@ -70,7 +70,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             <div className="flex justify-between items-center p-6 border-b border-border bg-background">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-accent rounded-sm"></div>
-                <h2 className="text-sm font-bold uppercase tracking-widest text-primary">Auto Nations ID</h2>
+                <h2 className="text-sm font-bold uppercase tracking-widest text-primary">O.K.S Auto ID</h2>
               </div>
               <button onClick={onClose} className="text-secondary hover:text-primary transition-colors">
                 <X className="w-5 h-5" />

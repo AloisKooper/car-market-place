@@ -8,6 +8,7 @@ import AIChatBot from './components/AIChatBot';
 import Globe from './components/Globe';
 import Footer from './components/Footer';
 import Dashboard from './components/Dashboard';
+import AdminDashboard from './components/AdminDashboard';
 import CompareBar from './components/CompareBar';
 import CompareModal from './components/CompareModal';
 import LoadingScreen from './components/LoadingScreen';
@@ -17,34 +18,60 @@ import { ArrowRight, Star, ShieldCheck, Truck, Wrench, Quote, Filter, ChevronDow
 import { motion, AnimatePresence } from 'framer-motion';
 import { Routes, Route, useNavigate, useLocation, Navigate, useParams } from 'react-router-dom';
 import { supabase } from './lib/supabase';
+import * as simpleIcons from 'simple-icons';
 
 // --- Components for Sections ---
 
 const BrandMarquee = () => {
-   const brands = [
-      "VOLKSWAGEN", "AUDI", "BMW", "HAVAL", "GWM", "CHERY", "TOYOTA", "BYD", "GEELY", "JETOUR", "TANK"
+   const brandIconKeys = [
+      'siVolkswagen',
+      'siAudi',
+      'siBmw',
+      'siHaval',
+      'siGwm',
+      'siChery',
+      'siToyota',
+      'siByd',
+      'siGeely',
+      'siJetour',
+      'siTank',
+      'siMercedesbenz',
    ];
 
+   const icons = brandIconKeys
+      .map((key) => (simpleIcons as any)[key])
+      .filter((icon) => !!icon);
+
    return (
-      <div className="bg-black border-y border-white/10 py-6 overflow-hidden flex relative z-20">
-         <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-black to-transparent z-10"></div>
-         <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-black to-transparent z-10"></div>
+      <div className="bg-white dark:bg-black border-y border-border/10 py-6 overflow-hidden flex relative z-20">
+         <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white dark:from-black to-transparent z-10"></div>
+         <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white dark:from-black to-transparent z-10"></div>
 
          <motion.div
             className="flex whitespace-nowrap"
             animate={{ x: [0, -1000] }}
             transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
          >
-            {[...brands, ...brands, ...brands].map((brand, i) => (
-               <div key={i} className="flex items-center mx-8 md:mx-12">
-                  <span className="text-white/30 text-lg md:text-xl font-bold tracking-[0.2em] uppercase font-display">{brand}</span>
-                  <div className="w-2 h-2 rounded-full bg-accent/30 ml-8 md:ml-12"></div>
+            {[...icons, ...icons, ...icons].map((icon, i) => (
+               <div key={`${icon.slug}-${i}`} className="flex items-center mx-8 md:mx-12">
+                  <svg
+                     role="img"
+                     viewBox="0 0 24 24"
+                     className="w-8 h-8 md:w-10 md:h-10 text-neutral-900 dark:text-white opacity-80"
+                  >
+                     <title>{icon.title}</title>
+                     <path d={icon.path} fill="currentColor" />
+                  </svg>
+                  <span className="sr-only">{icon.title}</span>
+                  <div className="w-2 h-2 rounded-full bg-accent/40 ml-8 md:ml-12"></div>
                </div>
             ))}
          </motion.div>
       </div>
    );
 };
+
+const VEHICLE_TYPES = ['Sedan', 'Hatchback', 'SUV', 'Coupe', 'Bakkie', 'Truck', '7 Seater', 'Van'];
 
 // --- Reusable Filter Component (Dashboard Style) ---
 interface FilterSectionProps {
@@ -140,13 +167,15 @@ const InnovationPage: React.FC<{ onOpenChat: () => void, isDarkMode: boolean }> 
          initial={{ opacity: 0 }}
          animate={{ opacity: 1 }}
          exit={{ opacity: 0 }}
-         className="min-h-screen bg-[#050505] text-white pt-20 overflow-x-hidden font-sans"
+         className="min-h-screen bg-background text-primary pt-20 overflow-x-hidden font-sans transition-colors duration-500"
       >
          {/* 1. Hero: Immersive & Cinematic */}
          <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
-            <div className="absolute inset-0 bg-[url('/S3_Hero_Section_GAN.jpg')] bg-cover bg-center opacity-40 scale-105 animate-pulse-slow"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/50 to-transparent"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-accent/10 via-transparent to-transparent"></div>
+            <div className="absolute inset-0 bg-surface/30 dark:bg-black/50 z-0"></div>
+            {/* Abstract Background */}
+            <div className="absolute inset-0 overflow-hidden opacity-30 dark:opacity-20 pointer-events-none">
+               <div className="absolute -top-[50%] -left-[50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-accent/20 via-transparent to-transparent animate-spin-slow"></div>
+            </div>
 
             <div className="max-w-[1440px] mx-auto px-6 lg:px-12 relative z-10 text-center">
                <motion.div
@@ -154,33 +183,33 @@ const InnovationPage: React.FC<{ onOpenChat: () => void, isDarkMode: boolean }> 
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                >
-                  <div className="inline-flex items-center gap-3 mb-8 border border-white/10 bg-white/5 px-6 py-2 rounded-full backdrop-blur-md hover:bg-white/10 transition-colors cursor-default">
+                  <div className="inline-flex items-center gap-3 mb-8 border border-border bg-surface/50 px-6 py-2 rounded-full backdrop-blur-md hover:bg-surface transition-colors cursor-default">
                      <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
                      </span>
-                     <span className="text-xs font-bold uppercase tracking-[0.2em] text-white/80">Auto Nations Protocol V3.0</span>
+                     <span className="text-xs font-bold uppercase tracking-[0.2em] text-secondary">O.K.S Auto Protocol V3.0</span>
                   </div>
 
-                  <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter text-white mb-8 leading-[0.9]">
+                  <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter text-primary mb-8 leading-[0.9]">
                      BEYOND <br />
-                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-400 to-gray-600">LOGISTICS.</span>
+                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">LOGISTICS.</span>
                   </h1>
 
-                  <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed mb-12">
+                  <p className="text-lg md:text-xl text-secondary max-w-2xl mx-auto font-light leading-relaxed mb-12">
                      We've re-engineered the global supply chain. Algorithmic sourcing, real-time tracking, and direct factory access.
                   </p>
 
                   <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
                      <button
                         onClick={onOpenChat}
-                        className="group relative px-8 py-4 bg-white text-black font-bold uppercase tracking-widest overflow-hidden hover:bg-gray-200 transition-all duration-300 rounded-sm"
+                        className="group relative px-8 py-4 bg-primary text-background font-bold uppercase tracking-widest overflow-hidden hover:bg-accent hover:text-white transition-all duration-300 rounded-sm"
                      >
                         <span className="relative z-10 flex items-center gap-3">
                            Initialize Sourcing <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </span>
                      </button>
-                     <button className="px-8 py-4 border border-white/20 text-white font-bold uppercase tracking-widest hover:bg-white/5 transition-all duration-300 rounded-sm flex items-center gap-3">
+                     <button className="px-8 py-4 border border-border text-primary font-bold uppercase tracking-widest hover:bg-surface transition-all duration-300 rounded-sm flex items-center gap-3">
                         <span className="w-2 h-2 bg-accent rounded-full"></span> Live Network Status
                      </button>
                   </div>
@@ -189,74 +218,74 @@ const InnovationPage: React.FC<{ onOpenChat: () => void, isDarkMode: boolean }> 
          </section>
 
          {/* 2. The Core Systems (Grid) */}
-         <section className="py-32 relative">
+         <section className="py-32 relative bg-surface/30">
             <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
                   <div>
-                     <h2 className="text-4xl md:text-5xl font-light mb-4">Core <span className="font-bold text-white">Systems</span></h2>
+                     <h2 className="text-4xl md:text-5xl font-light text-primary mb-4">Core <span className="font-bold">Systems</span></h2>
                      <div className="w-20 h-1 bg-accent"></div>
                   </div>
-                  <p className="text-gray-400 max-w-md text-sm leading-relaxed text-right md:text-left">
+                  <p className="text-secondary max-w-md text-sm leading-relaxed text-right md:text-left">
                      Our infrastructure is built on three pillars: Artificial Intelligence, Global Logistics, and Quality Assurance.
                   </p>
                </div>
 
                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {/* System 1 */}
-                  <div className="group relative bg-[#0A0A0A] border border-white/5 p-8 hover:border-accent/50 transition-colors duration-500 overflow-hidden">
-                     <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition-opacity">
-                        <Binary className="w-16 h-16 text-white" strokeWidth={0.5} />
+                  <div className="group relative bg-background border border-border p-8 hover:border-accent/50 transition-colors duration-500 overflow-hidden shadow-sm hover:shadow-xl">
+                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                        <Binary className="w-16 h-16 text-primary" strokeWidth={0.5} />
                      </div>
                      <div className="relative z-10 h-full flex flex-col justify-between min-h-[300px]">
                         <div>
                            <div className="text-accent font-mono text-xs mb-4">/// SYSTEM_01</div>
-                           <h3 className="text-2xl font-bold mb-4 group-hover:text-accent transition-colors">AI Sourcing</h3>
-                           <p className="text-gray-400 text-sm leading-relaxed">
+                           <h3 className="text-2xl font-bold mb-4 text-primary group-hover:text-accent transition-colors">AI Sourcing</h3>
+                           <p className="text-secondary text-sm leading-relaxed">
                               Proprietary algorithms scan global databases to find the exact spec you need at the best market price.
                            </p>
                         </div>
-                        <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-center">
-                           <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Latency: 12ms</span>
+                        <div className="mt-8 pt-8 border-t border-border flex justify-between items-center">
+                           <span className="text-xs font-bold uppercase tracking-widest text-secondary">Latency: 12ms</span>
                            <ArrowRight className="w-4 h-4 text-accent -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all" />
                         </div>
                      </div>
                   </div>
 
                   {/* System 2 */}
-                  <div className="group relative bg-[#0A0A0A] border border-white/5 p-8 hover:border-accent/50 transition-colors duration-500 overflow-hidden">
-                     <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition-opacity">
-                        <GlobeIcon className="w-16 h-16 text-white" strokeWidth={0.5} />
+                  <div className="group relative bg-background border border-border p-8 hover:border-accent/50 transition-colors duration-500 overflow-hidden shadow-sm hover:shadow-xl">
+                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                        <GlobeIcon className="w-16 h-16 text-primary" strokeWidth={0.5} />
                      </div>
                      <div className="relative z-10 h-full flex flex-col justify-between min-h-[300px]">
                         <div>
                            <div className="text-accent font-mono text-xs mb-4">/// SYSTEM_02</div>
-                           <h3 className="text-2xl font-bold mb-4 group-hover:text-accent transition-colors">Global Logistics</h3>
-                           <p className="text-gray-400 text-sm leading-relaxed">
+                           <h3 className="text-2xl font-bold mb-4 text-primary group-hover:text-accent transition-colors">Global Logistics</h3>
+                           <p className="text-secondary text-sm leading-relaxed">
                               End-to-end tracking from factory floor to your driveway. Customs, freight, and insurance handled automatically.
                            </p>
                         </div>
-                        <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-center">
-                           <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Coverage: 100%</span>
+                        <div className="mt-8 pt-8 border-t border-border flex justify-between items-center">
+                           <span className="text-xs font-bold uppercase tracking-widest text-secondary">Coverage: 100%</span>
                            <ArrowRight className="w-4 h-4 text-accent -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all" />
                         </div>
                      </div>
                   </div>
 
                   {/* System 3 */}
-                  <div className="group relative bg-[#0A0A0A] border border-white/5 p-8 hover:border-accent/50 transition-colors duration-500 overflow-hidden">
-                     <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition-opacity">
-                        <ShieldCheck className="w-16 h-16 text-white" strokeWidth={0.5} />
+                  <div className="group relative bg-background border border-border p-8 hover:border-accent/50 transition-colors duration-500 overflow-hidden shadow-sm hover:shadow-xl">
+                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                        <ShieldCheck className="w-16 h-16 text-primary" strokeWidth={0.5} />
                      </div>
                      <div className="relative z-10 h-full flex flex-col justify-between min-h-[300px]">
                         <div>
                            <div className="text-accent font-mono text-xs mb-4">/// SYSTEM_03</div>
-                           <h3 className="text-2xl font-bold mb-4 group-hover:text-accent transition-colors">Zero Defects</h3>
-                           <p className="text-gray-400 text-sm leading-relaxed">
-                              Every vehicle and part undergoes a rigorous 150-point inspection. We guarantee authenticity and condition.
+                           <h3 className="text-2xl font-bold mb-4 text-primary group-hover:text-accent transition-colors">Zero Defects</h3>
+                           <p className="text-secondary text-sm leading-relaxed">
+                              Every vehicle undergoes a rigorous 150-point inspection. We guarantee authenticity and condition.
                            </p>
                         </div>
-                        <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-center">
-                           <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Verified</span>
+                        <div className="mt-8 pt-8 border-t border-border flex justify-between items-center">
+                           <span className="text-xs font-bold uppercase tracking-widest text-secondary">Verified</span>
                            <ArrowRight className="w-4 h-4 text-accent -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all" />
                         </div>
                      </div>
@@ -266,30 +295,30 @@ const InnovationPage: React.FC<{ onOpenChat: () => void, isDarkMode: boolean }> 
          </section>
 
          {/* 3. Data Visualization / Stats */}
-         <section className="py-24 bg-[#0A0A0A] border-y border-white/5">
+         <section className="py-24 bg-background border-y border-border">
             <div className="max-w-[1440px] mx-auto px-6 lg:px-12">
                <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
                   <div>
-                     <div className="text-4xl md:text-5xl font-black text-white mb-2">50+</div>
-                     <div className="text-xs font-bold uppercase tracking-widest text-gray-500">Global Suppliers</div>
+                     <div className="text-4xl md:text-5xl font-black text-primary mb-2">50+</div>
+                     <div className="text-xs font-bold uppercase tracking-widest text-secondary">Global Suppliers</div>
                   </div>
                   <div>
-                     <div className="text-4xl md:text-5xl font-black text-white mb-2">12ms</div>
-                     <div className="text-xs font-bold uppercase tracking-widest text-gray-500">Query Speed</div>
+                     <div className="text-4xl md:text-5xl font-black text-primary mb-2">12ms</div>
+                     <div className="text-xs font-bold uppercase tracking-widest text-secondary">Query Speed</div>
                   </div>
                   <div>
-                     <div className="text-4xl md:text-5xl font-black text-white mb-2">100%</div>
-                     <div className="text-xs font-bold uppercase tracking-widest text-gray-500">Insured</div>
+                     <div className="text-4xl md:text-5xl font-black text-primary mb-2">100%</div>
+                     <div className="text-xs font-bold uppercase tracking-widest text-secondary">Insured</div>
                   </div>
                   <div>
-                     <div className="text-4xl md:text-5xl font-black text-white mb-2">24/7</div>
-                     <div className="text-xs font-bold uppercase tracking-widest text-gray-500">Support</div>
+                     <div className="text-4xl md:text-5xl font-black text-primary mb-2">24/7</div>
+                     <div className="text-xs font-bold uppercase tracking-widest text-secondary">Support</div>
                   </div>
                </div>
             </div>
          </section>
 
-         <Footer isDarkMode={true} />
+         <Footer isDarkMode={isDarkMode} />
       </motion.div>
    );
 };
@@ -306,16 +335,16 @@ const ServicesPage: React.FC<{ isDarkMode: boolean; onEnquire: (product: any) =>
          shortDesc: 'Sourced from global hubs.',
          description: 'We specialize in sourcing high-performance and luxury vehicles from Japan, UK, and Singapore. Every vehicle undergoes a 150-point inspection before shipment.',
          features: ['Auction Access', 'Pre-Purchase Inspection', 'Secure Shipping'],
-         image: '/Auto Nations/2015 Golf 7 R.jpg'
+         image: '/OKS Auto/Golf 7 R.jpg'
       },
       {
          id: '02',
-         title: 'Parts Procurement',
-         icon: Settings,
-         shortDesc: 'Access to global catalogs.',
-         description: 'We connect you to the factories. From body kits and wheels to lighting and interior upgrades. If it exists in the Asian aftermarket, we can get it to Windhoek for you.',
-         features: ['Body Kits', 'Lighting Systems', 'Alloy Wheels'],
-         image: '/Auto Nations/Exterio Styling.jpg'
+         title: 'Global Sourcing',
+         icon: GlobeIcon,
+         shortDesc: 'China & UK Markets.',
+         description: 'Direct access to exclusive vehicle markets in China and the UK. We handle the entire procurement process for rare and high-demand vehicles.',
+         features: ['China Market Access', 'UK Imports', 'Exclusive Sourcing'],
+         image: '/OKS Auto/2015 Polo GTI.jpg'
       },
       {
          id: '03',
@@ -324,16 +353,16 @@ const ServicesPage: React.FC<{ isDarkMode: boolean; onEnquire: (product: any) =>
          shortDesc: 'China to Windhoek.',
          description: 'We take the headache out of importing. Our team handles all freight forwarding, customs clearing, and tax documentation. You pay one price, and we deliver the goods.',
          features: ['Freight Forwarding', 'Clearing Agents', 'Insurance'],
-         image: '/Auto Nations/Quality Assurance.jpg'
+         image: '/OKS Auto/Quality Assurances.jpg'
       },
       {
          id: '04',
-         title: 'Bulk Supply',
+         title: 'Fleet Solutions',
          icon: Box,
-         shortDesc: 'For garages & shops.',
-         description: 'Running a workshop? We offer wholesale pricing for bulk orders. Get consistent supply of consumables, performance parts, and accessories for your business.',
-         features: ['Wholesale Rates', 'Scheduled Delivery', 'Business Accounts'],
-         image: '/Auto Nations/Wheels & Tyres.jpg'
+         shortDesc: 'For businesses.',
+         description: 'Comprehensive fleet management and vehicle supply solutions for businesses. We ensure your company has the reliable transport it needs.',
+         features: ['Fleet Management', 'Volume Discounts', 'Business Accounts'],
+         image: '/OKS Auto/2016 Amarok V6.jpg'
       }
    ];
 
@@ -348,7 +377,7 @@ const ServicesPage: React.FC<{ isDarkMode: boolean; onEnquire: (product: any) =>
 
          {/* 1. Hero Section */}
          <section className="relative h-[60vh] flex flex-col justify-center items-center overflow-hidden border-b border-border">
-            <div className="absolute inset-0 bg-[url('/Auto Nations/Exterio Styling.jpg')] bg-cover bg-center opacity-20 grayscale"></div>
+            <div className="absolute inset-0 bg-[url('/OKS Auto/Exterio Styling.jpg')] bg-cover bg-center opacity-20 grayscale"></div>
             <div className="z-10 text-center px-6">
                <motion.div
                   initial={{ y: 30, opacity: 0 }}
@@ -458,7 +487,7 @@ const ServicesPage: React.FC<{ isDarkMode: boolean; onEnquire: (product: any) =>
                         The Import <br /><span className="font-bold">Standard.</span>
                      </h2>
                      <p className="text-secondary text-lg leading-relaxed mb-12">
-                        We've streamlined the import process. Tracking shipments from Guangzhou manufacturing hubs to our Windhoek facility in real-time. Authentic parts, transparent pricing, zero delays.
+                        We've streamlined the import process. Tracking shipments from Guangzhou manufacturing hubs to our Windhoek facility in real-time. Authentic vehicles, transparent pricing, zero delays.
                      </p>
 
                      <div className="grid grid-cols-2 gap-px bg-border border border-border">
@@ -496,7 +525,7 @@ const ServicesPage: React.FC<{ isDarkMode: boolean; onEnquire: (product: any) =>
          </section>
 
          <Footer isDarkMode={isDarkMode} />
-      </motion.div>
+      </motion.div >
    );
 };
 
@@ -516,11 +545,12 @@ export default function App() {
          case PageView.PROFILE: navigate('/profile'); break;
          case PageView.SERVICES: navigate('/services'); break;
          case PageView.INNOVATION: navigate('/innovation'); break;
+         case PageView.ADMIN: navigate('/admin'); break;
          default: navigate('/');
       }
    };
 
-   const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS); // State for products
+   const [products, setProducts] = useState<Product[]>([]); // State for products (Supabase-backed)
 
    // Persistent State Initialization
    const [cart, setCart] = useState<Product[]>(() => {
@@ -542,6 +572,7 @@ export default function App() {
 
    // Auth State
    const [user, setUser] = useState<any>(null);
+   const [isAdmin, setIsAdmin] = useState(false);
 
    // Product Page State
    const [sortBy, setSortBy] = useState<SortOption>('featured');
@@ -550,6 +581,7 @@ export default function App() {
    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
    const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
    const [selectedMakes, setSelectedMakes] = useState<string[]>([]);
+   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
    const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
    const [yearRange, setYearRange] = useState<{ start: string, end: string }>({ start: '', end: '' });
    const [dateListedFilter, setDateListedFilter] = useState<string>('all');
@@ -568,11 +600,12 @@ export default function App() {
 
    // Collapsible Filters State
    const [isCategoryFilterOpen, setIsCategoryFilterOpen] = useState(true);
+   const [isTypeFilterOpen, setIsTypeFilterOpen] = useState(false);
    const [isPriceFilterOpen, setIsPriceFilterOpen] = useState(true);
    const [isMakeFilterOpen, setIsMakeFilterOpen] = useState(true);
    const [isAvailabilityFilterOpen, setIsAvailabilityFilterOpen] = useState(true);
-   const [isYearFilterOpen, setIsYearFilterOpen] = useState(true);
-   const [isDateListedFilterOpen, setIsDateListedFilterOpen] = useState(true);
+   const [isYearFilterOpen, setIsYearFilterOpen] = useState(false);
+   const [isDateListedFilterOpen, setIsDateListedFilterOpen] = useState(false);
 
    // UI States for Animations
    const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
@@ -597,39 +630,52 @@ export default function App() {
       }
    }, [isDarkMode]);
 
-   // Fetch Products from Supabase
-   // Fetch Products from Supabase - DISABLED FOR TEMPLATE UPDATE TO USE LOCAL MOCK DATA
-   /*
+   // Fetch Products from Supabase (fallback to mock data if error)
    useEffect(() => {
       const fetchProducts = async () => {
          setIsProductsLoading(true);
          const { data, error } = await supabase
             .from('products')
-            .select('*');
+            .select('*, product_images(url, position)');
 
          if (error) {
-            console.error('Error fetching products:', error);
+            console.error('Error fetching products from Supabase, falling back to mock data:', error);
+            setProducts(MOCK_PRODUCTS);
          } else {
-            const mappedProducts: Product[] = (data || []).map((p: any) => ({
-               id: p.id,
-               name: p.name,
-               category: p.category,
-               price: p.price,
-               image: p.image?.replace(/ /g, '_'),
-               rating: p.rating,
-               reviews: p.reviews,
-               featured: p.featured,
-               shippingInfo: p.shipping_info,
-               make: p.make,
-               model: p.model,
-               year: p.year,
-               mileage: p.mileage,
-               transmission: p.transmission,
-               fuelType: p.fuel_type,
-               engine: p.engine,
-               zeroToSixty: p.zero_to_sixty,
-               specs: p.specs
-            }));
+            const mappedProducts: Product[] = (data || []).map((p: any) => {
+               const images: string[] = Array.isArray(p.product_images)
+                  ? p.product_images
+                     .slice()
+                     .sort((a: any, b: any) => (a.position ?? 0) - (b.position ?? 0))
+                     .map((img: any) => img.url)
+                  : [];
+
+               const primaryImage = (images[0] || p.image || '').toString().replace(/ /g, '_');
+
+               return {
+                  id: p.id,
+                  name: p.name,
+                  category: p.category,
+                  price: p.price,
+                  image: primaryImage,
+                  images: images.length > 0 ? images : undefined,
+                  rating: Number(p.rating ?? 0),
+                  reviews: Number(p.reviews ?? 0),
+                  featured: !!p.featured,
+                  shippingInfo: p.shipping_info ?? undefined,
+                  description: p.description ?? undefined,
+                  make: p.make ?? undefined,
+                  model: p.model ?? undefined,
+                  vehicleType: p.vehicle_type ?? undefined,
+                  year: p.year ?? undefined,
+                  mileage: p.mileage ?? undefined,
+                  transmission: p.transmission ?? undefined,
+                  fuelType: p.fuel_type ?? undefined,
+                  engine: p.engine ?? undefined,
+                  zeroToSixty: p.zero_to_sixty ?? undefined,
+                  specs: p.specs ?? undefined,
+               } as Product;
+            });
             setProducts(mappedProducts);
          }
          setIsProductsLoading(false);
@@ -637,7 +683,6 @@ export default function App() {
 
       fetchProducts();
    }, []);
-   */
 
    // Persistence Effects
    useEffect(() => {
@@ -652,9 +697,28 @@ export default function App() {
       localStorage.setItem('compareList', JSON.stringify(compareList));
    }, [compareList]);
 
+   const refreshAdminStatus = async (supabaseUser: any | null) => {
+      if (!supabaseUser) {
+         setIsAdmin(false);
+         return;
+      }
+      const { data, error } = await supabase
+         .from('admin_users')
+         .select('id')
+         .eq('id', supabaseUser.id)
+         .maybeSingle();
+      if (error) {
+         console.debug('Admin status check failed (expected if table or RLS not accessible to this user):', error);
+         setIsAdmin(false);
+         return;
+      }
+      setIsAdmin(!!data);
+   };
+
    useEffect(() => {
       supabase.auth.getSession().then(({ data: { session } }) => {
          setUser(session?.user ?? null);
+         refreshAdminStatus(session?.user ?? null);
       }).catch(err => {
          console.debug("Supabase auth session check failed (expected if using placeholder keys):", err);
       });
@@ -663,6 +727,7 @@ export default function App() {
          data: { subscription },
       } = supabase.auth.onAuthStateChange((_event, session) => {
          setUser(session?.user ?? null);
+         refreshAdminStatus(session?.user ?? null);
          if (session?.user && _event === 'SIGNED_IN') {
             // Only redirect if explicitly needed, or maybe just set user state without redirecting
             // setCurrentPage(PageView.PROFILE); // Removed auto-redirect
@@ -746,7 +811,7 @@ export default function App() {
       //   setIsProductsLoading(false);
       // }, 800);
       // return () => clearTimeout(timer);
-   }, [searchQuery, selectedCategories, selectedPriceRanges, selectedMakes, selectedAvailability, yearRange, dateListedFilter]);
+   }, [searchQuery, selectedCategories, selectedPriceRanges, selectedMakes, selectedTypes, selectedAvailability, yearRange, dateListedFilter]);
 
    const filteredProducts = useMemo(() => {
       let filtered = [...products]; // Use fetched products
@@ -775,6 +840,10 @@ export default function App() {
 
       if (selectedMakes.length > 0) {
          filtered = filtered.filter(p => p.make && selectedMakes.includes(p.make));
+      }
+
+      if (selectedTypes.length > 0) {
+         filtered = filtered.filter(p => p.vehicleType && selectedTypes.includes(p.vehicleType));
       }
 
       if (selectedAvailability.length > 0) {
@@ -811,11 +880,18 @@ export default function App() {
          default:
             return filtered.filter(p => p.featured).concat(filtered.filter(p => !p.featured));
       }
-   }, [sortBy, searchQuery, selectedCategories, selectedPriceRanges, selectedMakes, selectedAvailability, yearRange, dateListedFilter, products]);
+   }, [sortBy, searchQuery, selectedCategories, selectedPriceRanges, selectedMakes, selectedTypes, selectedAvailability, yearRange, dateListedFilter, products]);
 
    const toggleCategory = (catId: string) => {
       setSelectedCategories(prev =>
          prev.includes(catId) ? prev.filter(id => id !== catId) : [...prev, catId]
+      );
+      setVisibleProductCount(6);
+   };
+
+   const toggleType = (type: string) => {
+      setSelectedTypes(prev =>
+         prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
       );
       setVisibleProductCount(6);
    };
@@ -969,6 +1045,9 @@ export default function App() {
    const renderProductDetail = () => {
       if (!selectedProduct) return null;
       const isVehicle = selectedProduct.category === 'vehicles';
+      const galleryImages = (selectedProduct.images && selectedProduct.images.length > 0)
+         ? selectedProduct.images
+         : [selectedProduct.image];
       const crumbs = [
          { label: 'Inventory', view: PageView.PRODUCTS },
          { label: selectedProduct.category },
@@ -992,7 +1071,7 @@ export default function App() {
                         transition={{ delay: 0.2 }}
                         className="relative aspect-[4/3] bg-surface border border-border overflow-hidden mb-4"
                      >
-                        <img src={selectedProduct.image} className="w-full h-full object-cover" alt={selectedProduct.name} />
+                        <img src={galleryImages[0]} className="w-full h-full object-cover" alt={selectedProduct.name} />
                         {selectedProduct.featured && (
                            <div className="absolute top-0 left-0 bg-accent text-white text-xs font-bold px-4 py-2 uppercase tracking-widest">
                               Exclusive
@@ -1000,9 +1079,9 @@ export default function App() {
                         )}
                      </motion.div>
                      <div className="grid grid-cols-4 gap-4">
-                        {[1, 2, 3, 4].map((i) => (
-                           <div key={i} className="aspect-square bg-surface border border-border cursor-pointer hover:border-accent transition-colors opacity-60 hover:opacity-100">
-                              <img src={selectedProduct.image} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all" alt="Thumbnail" />
+                        {galleryImages.slice(0, 4).map((img, index) => (
+                           <div key={index} className="aspect-square bg-surface border border-border cursor-pointer hover:border-accent transition-colors opacity-60 hover:opacity-100">
+                              <img src={img} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all" alt="Thumbnail" />
                            </div>
                         ))}
                      </div>
@@ -1074,8 +1153,9 @@ export default function App() {
                         </div>
                         <div className="prose prose-sm dark:prose-invert max-w-none text-secondary">
                            <p>
-                              Engineered for absolute performance. This {selectedProduct.name} represents the pinnacle of {selectedProduct.category} technology.
-                              Sourced directly from our verified partners.
+                              {selectedProduct.description
+                                 ? selectedProduct.description
+                                 : `Engineered for absolute performance. This ${selectedProduct.name} represents the pinnacle of ${selectedProduct.category} technology. Sourced directly from our verified partners.`}
                            </p>
                         </div>
                      </div>
@@ -1191,7 +1271,11 @@ export default function App() {
                         <div className="absolute inset-0 p-6 lg:p-8 flex flex-col justify-end z-10">
                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                               <div className="transform transition-all duration-300">
-                                 <span className="text-xs font-mono text-accent mb-2 block">0{idx + 1}</span>
+                                 <div className="w-8 h-8 mb-4 text-accent fill-current">
+                                    <svg role="img" viewBox="0 0 24 24" className="w-full h-full">
+                                       <path d={BRAND_ICONS[cat.icon]?.path} />
+                                    </svg>
+                                 </div>
                                  <h3 className="text-2xl lg:text-3xl font-bold text-white uppercase tracking-tighter whitespace-nowrap">{cat.name}</h3>
                               </div>
                               <motion.div
@@ -1228,9 +1312,7 @@ export default function App() {
                   <div className="max-w-2xl">
                      <span className="inline-block py-1 px-3 border border-accent text-accent text-[10px] font-bold uppercase tracking-widest mb-6 rounded-full">Global Sourcing Protocol</span>
                      <h2 className="text-4xl md:text-6xl font-light mb-6 tracking-tight text-white">WE BRIDGE <br />THE <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">IMPOSSIBLE.</span></h2>
-                     <p className="text-gray-400 text-lg font-light leading-relaxed max-w-lg">
-                        Can't find it in Namibia? We source directly from manufacturing hubs in China and Germany. Vehicles, parts, and rare specs delivered to your door.
-                     </p>
+                     <p className="text-gray-400 text-lg font-light leading-relaxed max-w-lg">Can't find it in Namibia? We source directly from manufacturing hubs in China and Germany. Vehicles and rare specs delivered to your door.</p>
                   </div>
                   <div>
                      <button
@@ -1381,7 +1463,7 @@ export default function App() {
 
                <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-border">
                   <motion.div whileHover="hover" className="relative h-[600px] group overflow-hidden cursor-default">
-                     <img src="/Auto Nations/Global Logistics.jpg" className="absolute inset-0 w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0 opacity-60 group-hover:opacity-100" />
+                     <img src="/OKS Auto/Global Logistics.jpg" className="absolute inset-0 w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0 opacity-60 group-hover:opacity-100" />
                      <div className="absolute inset-0 bg-background/40 group-hover:bg-transparent transition-colors duration-500"></div>
 
                      <div className="absolute inset-0 p-8 flex flex-col justify-between">
@@ -1397,7 +1479,7 @@ export default function App() {
                   </motion.div>
 
                   <motion.div whileHover="hover" className="relative h-[600px] group overflow-hidden cursor-default">
-                     <img src="/Auto Nations/Quality Assurance.jpg" className="absolute inset-0 w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0 opacity-60 group-hover:opacity-100" />
+                     <img src="/OKS Auto/Quality Assurances.jpg" className="absolute inset-0 w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0 opacity-60 group-hover:opacity-100" />
                      <div className="absolute inset-0 bg-background/40 group-hover:bg-transparent transition-colors duration-500"></div>
 
                      <div className="absolute inset-0 p-8 flex flex-col justify-between">
@@ -1406,7 +1488,7 @@ export default function App() {
                            <div className="w-12 h-1 bg-accent mb-4 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
                            <h3 className="text-2xl font-bold text-primary group-hover:text-white mb-2 uppercase">Quality Assurance</h3>
                            <p className="text-secondary group-hover:text-gray-200 text-sm leading-relaxed max-w-xs">
-                              Every component is inspected. We only partner with OEM-certified suppliers to ensure fitment and finish meets manufacturer standards.
+                              Every vehicle is rigorously inspected. We ensure all imports meet our high standards for safety and performance before they reach you.
                            </p>
                         </div>
                      </div>
@@ -1422,7 +1504,7 @@ export default function App() {
                            <div className="w-12 h-1 bg-accent mb-4 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
                            <h3 className="text-2xl font-bold text-primary group-hover:text-white mb-2 uppercase">180-Day Warranty</h3>
                            <p className="text-secondary group-hover:text-gray-200 text-sm leading-relaxed max-w-xs">
-                              We stand behind our imports. Comprehensive protection on all mechanical parts and electronics for peace of mind.
+                              We stand behind our vehicles. Comprehensive 6-month warranty on engine and transmission for your complete peace of mind.
                            </p>
                         </div>
                      </div>
@@ -1462,6 +1544,19 @@ export default function App() {
             </div>
          </FilterSection>
 
+         <FilterSection title="Type" isOpen={isTypeFilterOpen} onToggle={() => setIsTypeFilterOpen(!isTypeFilterOpen)}>
+            <div className="space-y-1">
+               {VEHICLE_TYPES.map(type => (
+                  <FilterCheckbox
+                     key={type}
+                     label={type}
+                     checked={selectedTypes.includes(type)}
+                     onClick={() => toggleType(type)}
+                  />
+               ))}
+            </div>
+         </FilterSection>
+
          <FilterSection title="Price Range" isOpen={isPriceFilterOpen} onToggle={() => setIsPriceFilterOpen(!isPriceFilterOpen)}>
             <div className="space-y-1">
                {PRICE_RANGES.map(range => (
@@ -1496,7 +1591,7 @@ export default function App() {
             </div>
          </FilterSection>
 
-         <FilterSection title="Model Year" isOpen={isYearFilterOpen} onToggle={() => setIsYearFilterOpen(!isYearFilterOpen)}>
+         <FilterSection title="Year" isOpen={isYearFilterOpen} onToggle={() => setIsYearFilterOpen(!isYearFilterOpen)}>
             <div className="grid grid-cols-2 gap-2 mt-2">
                <input
                   type="number"
@@ -1542,6 +1637,7 @@ export default function App() {
                   setSelectedCategories([]);
                   setSelectedPriceRanges([]);
                   setSelectedMakes([]);
+                  setSelectedTypes([]);
                   setSelectedAvailability([]);
                   setSearchQuery('');
                   setYearRange({ start: '', end: '' });
@@ -1750,6 +1846,7 @@ export default function App() {
       if (path.startsWith('/profile')) return PageView.PROFILE;
       if (path.startsWith('/services')) return PageView.SERVICES;
       if (path.startsWith('/innovation')) return PageView.INNOVATION;
+      if (path.startsWith('/admin')) return PageView.ADMIN;
       return PageView.HOME;
    };
 
@@ -1779,6 +1876,7 @@ export default function App() {
                   <Route path="/profile" element={<Dashboard user={user} wishlist={wishlist} onSignOut={handleSignOut} onNavigate={navigate} />} />
                   <Route path="/services" element={<ServicesPage isDarkMode={isDarkMode} onEnquire={handleEnquire} />} />
                   <Route path="/innovation" element={<InnovationPage onOpenChat={() => setIsChatOpen(true)} isDarkMode={isDarkMode} />} />
+                  <Route path="/admin" element={<AdminDashboard products={products} setProducts={setProducts} isDarkMode={isDarkMode} user={user} isAdmin={isAdmin} />} />
                   <Route path="*" element={<Navigate to="/" />} />
                </Routes>
             </div>

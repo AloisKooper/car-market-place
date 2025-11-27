@@ -33,7 +33,7 @@ const LoadingScreen: React.FC = () => {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="mb-12"
                 >
-                    <img src="/Auto Nations/Auto nations logo new.png" alt="Auto Nations" className="h-20 md:h-32 w-auto object-contain" />
+                    <img src="/OKS Auto/OKS Auto Logo dark mode.png" alt="O.K.S Auto" className="h-20 md:h-32 w-auto object-contain" />
                 </motion.div>
 
                 {/* Counter */}

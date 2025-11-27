@@ -93,20 +93,20 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, t
 
             {/* Logo */}
             <div
-              className="flex items-center cursor-pointer group relative z-50"
+              className="flex items-center cursor-pointer group relative z-50 gap-3"
               onClick={() => {
                 onNavigate(PageView.HOME);
                 handleMobileMenuOpenChange(false);
               }}
             >
               <img
-                src="/Auto Nations/Auto nations logo new.png"
-                alt="Auto Nations Logo"
-                className="h-10 md:h-12 w-auto mr-3 object-contain drop-shadow-md"
+                src={isTransparentWhiteState || isDarkMode ? "/OKS Auto/OKS Auto Logo dark mode.png" : "/OKS Auto/OKS Auto Logo light mode.png"}
+                alt="OKS Auto Logo"
+                className="h-10 md:h-12 w-auto object-contain drop-shadow-md"
               />
-              <div className="flex flex-col">
-                <span className={`text-lg font-bold tracking-[0.2em] leading-none transition-colors duration-300 ${textColorClass}`}>AUTO NATIONS</span>
-              </div>
+              <span className={`text-lg font-bold tracking-[0.2em] uppercase ${isTransparentWhiteState ? 'text-white' : 'text-primary dark:text-white'}`}>
+                O.K.S Auto
+              </span>
             </div>
 
             {/* Desktop Menu */}
@@ -115,7 +115,8 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, t
                 { label: 'Models', view: PageView.HOME },
                 { label: 'Inventory', view: PageView.PRODUCTS },
                 { label: 'Innovation', view: PageView.INNOVATION },
-                { label: 'Services', view: PageView.SERVICES }
+                { label: 'Services', view: PageView.SERVICES },
+                { label: 'Admin', view: PageView.ADMIN },
               ].map((item, idx) => (
                 <button
                   key={idx}
@@ -308,11 +309,11 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, t
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-3">
                     <img
-                      src="/Auto Nations/Auto nations logo new.png"
-                      alt="Auto Nations Logo"
+                      src={isDarkMode ? "/OKS Auto/OKS Auto Logo dark mode.png" : "/OKS Auto/OKS Auto Logo light mode.png"}
+                      alt="O.K.S Auto Logo"
                       className="h-8 w-auto object-contain drop-shadow-md"
                     />
-                    <span className="text-sm font-bold tracking-[0.2em] text-white">AUTO NATIONS</span>
+                    <span className="text-sm font-bold tracking-[0.2em] uppercase text-white">O.K.S Auto</span>
                   </div>
                   <button
                     onClick={() => handleMobileMenuOpenChange(false)}
@@ -361,7 +362,8 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, t
                     { label: 'Full Inventory', view: PageView.PRODUCTS, icon: ShoppingCart },
                     { label: 'Innovation Tech', view: PageView.INNOVATION, icon: Settings },
                     { label: 'Global Services', view: PageView.SERVICES, icon: Package },
-                    { label: 'My Wishlist', view: PageView.WISHLIST, icon: Heart, count: wishlistCount }
+                    { label: 'My Wishlist', view: PageView.WISHLIST, icon: Heart, count: wishlistCount },
+                    { label: 'Admin Dashboard', view: PageView.ADMIN, icon: LayoutDashboard },
                   ].map((item, idx) => (
                     <motion.button
                       key={idx}

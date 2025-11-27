@@ -60,7 +60,7 @@ const Hero: React.FC = () => {
           >
             <div className="w-8 h-[2px] bg-accent"></div>
             <h2 className="text-xs md:text-sm font-bold tracking-[0.3em] text-white/90 uppercase">
-              China to Namibia • Local Parts
+              China to Namibia • UK Imports
             </h2>
           </motion.div>
 
@@ -70,14 +70,14 @@ const Hero: React.FC = () => {
           >
             Import Cars.
             <br />
-            <span className="font-bold">Sell Parts.</span>
+            <span className="font-bold">UK Imports.</span>
           </motion.h1>
 
           <motion.p
             variants={heroItem}
             className="text-base md:text-lg text-white/70 max-w-lg mb-10 font-light leading-relaxed"
           >
-            We import cars from China to Namibia and sell parts locally.
+            We import cars from China to Namibia and the UK.
           </motion.p>
 
           <motion.div
@@ -97,7 +97,7 @@ const Hero: React.FC = () => {
               whileTap={{ scale: 0.98 }}
               className="group px-8 py-4 text-xs font-bold uppercase tracking-widest text-white border border-white/30 hover:border-accent hover:text-accent transition-colors flex items-center backdrop-blur-sm"
             >
-              Buy Parts
+              Our Services
             </motion.button>
           </motion.div>
         </motion.div>
@@ -110,7 +110,7 @@ const Hero: React.FC = () => {
           className="mt-20 border-t border-white/10 pt-8 hidden lg:flex items-end justify-between"
         >
           <div className="flex gap-12">
-            {['Imports', 'Stock', 'Parts', 'Upgrades'].map((cat) => (
+            {['Imports', 'Stock', 'UK Imports', 'China Imports'].map((cat) => (
               <motion.div
                 whileHover={{ y: -5 }}
                 key={cat}

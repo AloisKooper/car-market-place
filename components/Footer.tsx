@@ -78,17 +78,17 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, onNavigate }) => {
                <div className="space-y-6">
                   <div className="flex items-center gap-3">
                      <img
-                        src="/Auto Nations/Auto nations logo new.png"
-                        alt="Auto Nations Logo"
+                        src={isDarkMode ? "/OKS Auto/OKS Auto Logo dark mode.png" : "/OKS Auto/OKS Auto Logo light mode.png"}
+                        alt="O.K.S Auto Logo"
                         className="h-10 w-auto object-contain"
                      />
                      <div className="flex flex-col">
-                        <span className="text-lg font-bold tracking-[0.2em] leading-none text-primary">AUTO NATIONS</span>
+                        <span className="text-lg font-bold tracking-[0.2em] leading-none text-primary">O.K.S AUTO</span>
                         <span className="text-[10px] tracking-widest text-accent uppercase">NA / Global Sourcing</span>
                      </div>
                   </div>
                   <p className="text-secondary text-sm leading-relaxed">
-                     Premier automotive marketplace connecting Namibia to global manufacturing hubs. Precision parts, vehicles, and logistics.
+                     Premier automotive marketplace connecting Namibia to global manufacturing hubs. Precision vehicles and logistics.
                   </p>
                   <div className="flex gap-4">
                      <a href="#" className="w-8 h-8 flex items-center justify-center border border-border rounded-full text-secondary hover:text-white hover:bg-accent hover:border-accent transition-all"><Instagram className="w-4 h-4" /></a>
@@ -101,7 +101,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, onNavigate }) => {
                <div>
                   <h4 className="text-xs font-bold uppercase tracking-widest text-primary mb-6">Our Services</h4>
                   <ul className="space-y-4">
-                     {['Vehicle Import', 'Parts Procurement', 'Logistics & Customs', 'Wholesale Supply', 'Performance Tuning'].map((item) => (
+                     {['Vehicle Import', 'Global Sourcing', 'Logistics & Customs', 'Fleet Solutions', 'Vehicle Compliance'].map((item) => (
                         <li key={item}>
                            <a href="#" className="text-sm text-secondary hover:text-accent transition-colors flex items-center gap-2 group">
                               <span className="w-1 h-1 bg-accent rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
@@ -133,7 +133,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, onNavigate }) => {
                   <ul className="space-y-4">
                      <li className="flex items-center gap-3 text-sm text-secondary">
                         <Mail className="w-4 h-4 text-accent" />
-                        <span>sales@autonations.na</span>
+                        <span>sales@oksauto.na</span>
                      </li>
                      <li className="flex items-center gap-3 text-sm text-secondary">
                         <Phone className="w-4 h-4 text-accent" />
@@ -149,7 +149,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, onNavigate }) => {
 
             <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
                <p className="text-[10px] text-secondary uppercase tracking-widest">
-                  © 2024 Auto Nations. All rights reserved.
+                  © 2024 O.K.S Auto. All rights reserved.
                </p>
                <div className="flex gap-6">
                   <a href="#" className="text-[10px] text-secondary hover:text-primary uppercase tracking-widest">Privacy</a>
