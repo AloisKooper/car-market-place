@@ -542,8 +542,6 @@ const Dashboard: React.FC<DashboardProps> = ({ user, isAdmin, wishlist, onSignOu
         );
     };
 
-    const [loading, setLoading] = useState(false);
-
     // Mock Order History (replace with real data fetch if available)
     const orders = [
         { id: 'ORD-7782-XJ', date: '2024-03-15', status: 'In Transit', total: 45000, items: 2 },
