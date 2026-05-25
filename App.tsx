@@ -531,6 +531,26 @@ export default function App() {
 
    // Auth State
    const [user, setUser] = useState<any>(null);
+   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+   const checkAdminStatus = async (userId: string) => {
+      try {
+         const { data, error } = await supabase
+            .from('profiles')
+            .select('is_admin')
+            .eq('id', userId)
+            .single();
+         if (error) {
+            console.error('Error fetching admin status:', error);
+            setIsAdmin(false);
+         } else {
+            setIsAdmin(data?.is_admin || false);
+         }
+      } catch (err) {
+         console.error('Failed to check admin status:', err);
+         setIsAdmin(false);
+      }
+   };
 
    // Product Page State
    const [sortBy, setSortBy] = useState<SortOption>('featured');
@@ -577,41 +597,41 @@ export default function App() {
    }, [isDarkMode]);
 
    // Fetch Products from Supabase
+   const fetchProducts = async () => {
+      setIsProductsLoading(true);
+      const { data, error } = await supabase
+         .from('products')
+         .select('*');
+
+      if (error) {
+         console.error('Error fetching products:', error);
+      } else {
+         const mappedProducts: Product[] = (data || []).map((p: any) => ({
+            id: p.id,
+            name: p.name,
+            category: p.category,
+            price: p.price,
+            image: p.image?.replace(/ /g, '_'),
+            rating: p.rating,
+            reviews: p.reviews,
+            featured: p.featured,
+            shippingInfo: p.shipping_info,
+            make: p.make,
+            model: p.model,
+            year: p.year,
+            mileage: p.mileage,
+            transmission: p.transmission,
+            fuelType: p.fuel_type,
+            engine: p.engine,
+            zeroToSixty: p.zero_to_sixty,
+            specs: p.specs
+         }));
+         setProducts(mappedProducts);
+      }
+      setIsProductsLoading(false);
+   };
+
    useEffect(() => {
-      const fetchProducts = async () => {
-         setIsProductsLoading(true);
-         const { data, error } = await supabase
-            .from('products')
-            .select('*');
-
-         if (error) {
-            console.error('Error fetching products:', error);
-         } else {
-            const mappedProducts: Product[] = (data || []).map((p: any) => ({
-               id: p.id,
-               name: p.name,
-               category: p.category,
-               price: p.price,
-               image: p.image?.replace(/ /g, '_'),
-               rating: p.rating,
-               reviews: p.reviews,
-               featured: p.featured,
-               shippingInfo: p.shipping_info,
-               make: p.make,
-               model: p.model,
-               year: p.year,
-               mileage: p.mileage,
-               transmission: p.transmission,
-               fuelType: p.fuel_type,
-               engine: p.engine,
-               zeroToSixty: p.zero_to_sixty,
-               specs: p.specs
-            }));
-            setProducts(mappedProducts);
-         }
-         setIsProductsLoading(false);
-      };
-
       fetchProducts();
    }, []);
 
@@ -630,7 +650,13 @@ export default function App() {
 
    useEffect(() => {
       supabase.auth.getSession().then(({ data: { session } }) => {
-         setUser(session?.user ?? null);
+         const loggedInUser = session?.user ?? null;
+         setUser(loggedInUser);
+         if (loggedInUser) {
+            checkAdminStatus(loggedInUser.id);
+         } else {
+            setIsAdmin(false);
+         }
       }).catch(err => {
          console.debug("Supabase auth session check failed (expected if using placeholder keys):", err);
       });
@@ -638,10 +664,12 @@ export default function App() {
       const {
          data: { subscription },
       } = supabase.auth.onAuthStateChange((_event, session) => {
-         setUser(session?.user ?? null);
-         if (session?.user && _event === 'SIGNED_IN') {
-            // Only redirect if explicitly needed, or maybe just set user state without redirecting
-            // setCurrentPage(PageView.PROFILE); // Removed auto-redirect
+         const loggedInUser = session?.user ?? null;
+         setUser(loggedInUser);
+         if (loggedInUser) {
+            checkAdminStatus(loggedInUser.id);
+         } else {
+            setIsAdmin(false);
          }
       });
 
@@ -1739,7 +1767,7 @@ export default function App() {
                   <Route path="/product/:id" element={<ProductDetailRoute />} />
                   <Route path="/cart" element={renderCart()} />
                   <Route path="/wishlist" element={renderWishlist()} />
-                  <Route path="/profile" element={<Dashboard user={user} wishlist={wishlist} onSignOut={handleSignOut} onNavigate={navigate} />} />
+                  <Route path="/profile" element={<Dashboard user={user} isAdmin={isAdmin} wishlist={wishlist} onSignOut={handleSignOut} onNavigate={navigate} onProductsChange={fetchProducts} />} />
                   <Route path="/services" element={<ServicesPage isDarkMode={isDarkMode} onEnquire={handleEnquire} />} />
                   <Route path="/innovation" element={<InnovationPage onOpenChat={() => setIsChatOpen(true)} isDarkMode={isDarkMode} />} />
                   <Route path="*" element={<Navigate to="/" />} />
