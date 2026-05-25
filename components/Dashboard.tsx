@@ -14,6 +14,7 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ user, isAdmin, wishlist, onSignOut, onNavigate, onProductsChange }) => {
+    const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'settings' | 'catalog'>('overview');
     const [loading, setLoading] = useState(false);
 
     const [catalogProducts, setCatalogProducts] = useState<any[]>([]);
