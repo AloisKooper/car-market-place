@@ -2,7 +2,7 @@
 import { Product, Category } from './types';
 
 // REPLACE THIS URL WITH THE LINK TO YOUR UPLOADED LOGO
-export const LOGO_URL = 'https://via.placeholder.com/150/D60000/FFFFFF?text=AutoNations+Logo';
+export const LOGO_URL = 'https://via.placeholder.com/150/D60000/FFFFFF?text=Marie+Yashe+Auto+Logo';
 
 export const CATEGORIES: Category[] = [
   {

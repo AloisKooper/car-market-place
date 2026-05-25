@@ -25,13 +25,17 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
     try {
       if (mode === 'signup') {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
         });
         if (error) throw error;
-        // Auto sign in or show success message usually happens here
-        alert('Check your email for the confirmation link!');
+        // Handle both auto-confirm (no email confirmation) and standard email confirmation scenarios
+        if (data?.session) {
+          alert('Account created and signed in successfully!');
+        } else {
+          alert('Verification email sent! Please check your inbox to confirm your email.');
+        }
         onClose();
       } else {
         const { error } = await supabase.auth.signInWithPassword({
@@ -70,7 +74,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             <div className="flex justify-between items-center p-6 border-b border-border bg-background">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-accent rounded-sm"></div>
-                <h2 className="text-sm font-bold uppercase tracking-widest text-primary">Grand Motors ID</h2>
+                <h2 className="text-sm font-bold uppercase tracking-widest text-primary">Marie Yashe ID</h2>
               </div>
               <button onClick={onClose} className="text-secondary hover:text-primary transition-colors">
                 <X className="w-5 h-5" />

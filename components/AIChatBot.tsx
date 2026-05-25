@@ -17,7 +17,7 @@ const AIChatBot: React.FC<AIChatBotProps> = ({ isOpen, onClose, onOpen, external
     {
       id: 'welcome',
       role: 'model',
-      text: "Welcome to Auto Nations Concierge. How may I assist with your vehicle configuration today?",
+      text: "Welcome to Marie Yashe Auto Concierge. How may I assist with your vehicle configuration today?",
       timestamp: new Date()
     }
   ]);

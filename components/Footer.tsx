@@ -78,12 +78,12 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, onNavigate }) => {
                <div className="space-y-6">
                   <div className="flex items-center gap-3">
                      <img
-                        src={isDarkMode ? '/Grand Motors white logo.png' : '/Grand Motors black logo.png'}
-                        alt="Grand Motors NA Logo"
+                        src={isDarkMode ? '/Marie Yashe Auto white logo.png' : '/Marie Yashe Auto black logo.png'}
+                        alt="Marie Yashe Auto Logo"
                         className="h-10 w-auto object-contain"
                      />
                      <div className="flex flex-col">
-                        <span className="text-lg font-bold tracking-[0.2em] leading-none text-primary">GRAND MOTORS NA</span>
+                        <span className="text-lg font-bold tracking-[0.2em] leading-none text-primary">MARIE YASHE AUTO</span>
                         <span className="text-[10px] tracking-widest text-accent uppercase">NA / Global Sourcing</span>
                      </div>
                   </div>
@@ -133,7 +133,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, onNavigate }) => {
                   <ul className="space-y-4">
                      <li className="flex items-center gap-3 text-sm text-secondary">
                         <Mail className="w-4 h-4 text-accent" />
-                        <span>sales@autonations.na</span>
+                        <span>sales@marieyasheauto.com</span>
                      </li>
                      <li className="flex items-center gap-3 text-sm text-secondary">
                         <Phone className="w-4 h-4 text-accent" />
@@ -149,7 +149,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, onNavigate }) => {
 
             <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
                <p className="text-[10px] text-secondary uppercase tracking-widest">
-                  © 2024 Grand Motors NA. All rights reserved.
+                  © 2024 Marie Yashe Auto. All rights reserved.
                </p>
                <div className="flex gap-6">
                   <a href="#" className="text-[10px] text-secondary hover:text-primary uppercase tracking-widest">Privacy</a>

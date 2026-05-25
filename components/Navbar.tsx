@@ -92,12 +92,12 @@ const Navbar: React.FC<NavbarProps> = ({ onNavigate, cartCount, wishlistCount, t
               }}
             >
               <img
-                src={(isTransparentWhiteState || isDarkMode) ? '/Grand Motors white logo.png' : '/Grand Motors black logo.png'}
-                alt="Grand Motors NA Logo"
+                src={(isTransparentWhiteState || isDarkMode) ? '/Marie Yashe Auto white logo.png' : '/Marie Yashe Auto black logo.png'}
+                alt="Marie Yashe Auto Logo"
                 className="h-10 md:h-12 w-auto mr-3 object-contain drop-shadow-md"
               />
               <div className="flex flex-col">
-                <span className={`text-lg font-bold tracking-[0.2em] leading-none transition-colors duration-300 ${textColorClass}`}>GRAND MOTORS NA</span>
+                <span className={`text-lg font-bold tracking-[0.2em] leading-none transition-colors duration-300 ${textColorClass}`}>MARIE YASHE AUTO</span>
               </div>
             </div>
 

@@ -7,8 +7,8 @@ import { createClient } from '@supabase/supabase-js';
 // 3. Copy the "Project URL" and paste it below.
 // 4. Copy the "anon" / "public" key and paste it below.
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ertitgtvgxbwjodinpst.supabase.co';
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVydGl0Z3R2Z3hid2pvZGlucHN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwNjgyNzEsImV4cCI6MjA3OTY0NDI3MX0.KKCgu3jANJOBZ7W-HzRydGN_m9F9rdI877uUl6JdCjY';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://mlxizcvubqwayegrcmpt.supabase.co';
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1seGl6Y3Z1YnF3YXllZ3JjbXB0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2OTUwMzUsImV4cCI6MjA5NTI3MTAzNX0.P-vXTdiIkBIfqclfw__5B-vkrD71kGwkUbLIDJbWbU8';
 
 if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
   // Fallback to hardcoded values if env vars aren't set (useful for the provided specific key)
