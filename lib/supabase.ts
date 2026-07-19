@@ -1,18 +1,14 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-// --- SUPABASE CONNECTION INSTRUCTIONS ---
-// 1. Go to your Supabase Dashboard: https://supabase.com/dashboard
-// 2. Select your project -> Settings -> API
-// 3. Copy the "Project URL" and paste it below.
-// 4. Copy the "anon" / "public" key and paste it below.
+// Local Supabase defaults (pnpm db:start). Override with VITE_SUPABASE_* in .env.local
+// For a hosted client demo, create a free project at https://supabase.com/dashboard
+// and paste its Project URL + anon key into .env.local.
+const LOCAL_SUPABASE_URL = 'http://127.0.0.1:54321';
+const LOCAL_SUPABASE_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://mlxizcvubqwayegrcmpt.supabase.co';
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1seGl6Y3Z1YnF3YXllZ3JjbXB0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2OTUwMzUsImV4cCI6MjA5NTI3MTAzNX0.P-vXTdiIkBIfqclfw__5B-vkrD71kGwkUbLIDJbWbU8';
-
-if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-  // Fallback to hardcoded values if env vars aren't set (useful for the provided specific key)
-  // console.log("Using provided Supabase credentials.");
-}
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || LOCAL_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || LOCAL_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
