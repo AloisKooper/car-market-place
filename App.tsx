@@ -11,7 +11,7 @@ import Dashboard from './components/Dashboard';
 import CompareBar from './components/CompareBar';
 import CompareModal from './components/CompareModal';
 import { PageView, Product } from './types';
-import { CATEGORIES, PERFORMANCE_HIGHLIGHTS, PRICE_RANGES, MAKES, LOGO_URL, BRAND_ICONS } from './constants';
+import { CATEGORIES, PERFORMANCE_HIGHLIGHTS, PRICE_RANGES, MAKES, LOGO_URL, BRAND_ICONS, MOCK_PRODUCTS } from './constants';
 import { ArrowRight, Star, ShieldCheck, Truck, Wrench, Quote, Filter, ChevronDown, Check, Globe as GlobeIcon, Search, Plus, Minus, Heart, Trash2, ArrowRightLeft, X, Info, Gauge, Activity, Radio, MapPin, Cpu, Ship, Settings, Zap, Anchor, Box, Brain, Terminal, Layers, Wind, CloudLightning, Fingerprint, Container, ShoppingBag, Smartphone, Home, ChevronRight, Share2, Printer, Timer, Calendar, Fuel, Scale, Clock, Database, Network, Binary, BarChart3, ScanLine, ListFilter, AlertCircle, ShoppingCart, User, Package, CreditCard, Bell, Car, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Routes, Route, useNavigate, useLocation, Navigate, useParams } from 'react-router-dom';
@@ -596,37 +596,45 @@ export default function App() {
       }
    }, [isDarkMode]);
 
-   // Fetch Products from Supabase
+   // Fetch Products from Supabase (falls back to MOCK_PRODUCTS for offline demos)
    const fetchProducts = async () => {
       setIsProductsLoading(true);
-      const { data, error } = await supabase
-         .from('products')
-         .select('*');
+      try {
+         const { data, error } = await supabase
+            .from('products')
+            .select('*');
 
-      if (error) {
-         console.error('Error fetching products:', error);
-      } else {
-         const mappedProducts: Product[] = (data || []).map((p: any) => ({
-            id: p.id,
-            name: p.name,
-            category: p.category,
-            price: p.price,
-            image: p.image?.replace(/ /g, '_'),
-            rating: p.rating,
-            reviews: p.reviews,
-            featured: p.featured,
-            shippingInfo: p.shipping_info,
-            make: p.make,
-            model: p.model,
-            year: p.year,
-            mileage: p.mileage,
-            transmission: p.transmission,
-            fuelType: p.fuel_type,
-            engine: p.engine,
-            zeroToSixty: p.zero_to_sixty,
-            specs: p.specs
-         }));
-         setProducts(mappedProducts);
+         if (error) {
+            console.error('Error fetching products:', error);
+            setProducts(MOCK_PRODUCTS);
+         } else if (!data?.length) {
+            setProducts(MOCK_PRODUCTS);
+         } else {
+            const mappedProducts: Product[] = data.map((p: any) => ({
+               id: p.id,
+               name: p.name,
+               category: p.category,
+               price: p.price,
+               image: p.image?.replace(/ /g, '_'),
+               rating: p.rating,
+               reviews: p.reviews,
+               featured: p.featured,
+               shippingInfo: p.shipping_info,
+               make: p.make,
+               model: p.model,
+               year: p.year,
+               mileage: p.mileage,
+               transmission: p.transmission,
+               fuelType: p.fuel_type,
+               engine: p.engine,
+               zeroToSixty: p.zero_to_sixty,
+               specs: p.specs
+            }));
+            setProducts(mappedProducts);
+         }
+      } catch (err) {
+         console.error('Failed to reach products database:', err);
+         setProducts(MOCK_PRODUCTS);
       }
       setIsProductsLoading(false);
    };
