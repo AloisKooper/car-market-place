@@ -46,7 +46,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         onClose();
       }
     } catch (err: any) {
-      setError(err.message);
+      const message = String(err?.message || err || 'Authentication failed');
+      if (/failed to fetch|networkerror|load failed|dns|nxdomain/i.test(message)) {
+        setError(
+          'Database is not connected on this deploy. In Vercel, set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY from a free Supabase project, then Redeploy.'
+        );
+      } else {
+        setError(message);
+      }
     } finally {
       setLoading(false);
     }
